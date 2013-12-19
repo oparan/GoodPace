@@ -7,12 +7,19 @@
 //
 
 #import "AppDelegate.h"
+#import "Services.h"
+#import "Globals.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    services = [[Services alloc] init];
+
+    [services start];
+    
     return YES;
 }
 							

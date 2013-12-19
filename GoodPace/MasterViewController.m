@@ -9,6 +9,9 @@
 #import "MasterViewController.h"
 
 #import "DetailViewController.h"
+#import "Profile.h"
+#import "Globals.h"
+#import "Charity.h"
 
 @interface MasterViewController () {
     NSMutableArray *_objects;
@@ -30,6 +33,8 @@
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
+    
+    self.tableView.frame = CGRectMake(0,200,320,188);
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,16 +62,44 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _objects.count;
+    NSArray* charities = profile.getCharities;
+    
+    if (charities) {
+        return [charities count] + 1;
+    }
+    
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    
+    if (indexPath.row == 0) {
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(3,2, 319, 329)];
+        imv.image=[UIImage imageNamed:@"startImage.png"];
+        [cell.contentView addSubview:imv];
+    }
+    else {
+        NSArray* charities = profile.getCharities;
+        
+        Charity* charity = (Charity*) [charities objectAtIndex:indexPath.row - 1];
+        
+        cell.textLabel.text = charity.name;
+        [cell.imageView setImage:[UIImage imageNamed:charity.iconPath]];
+    }
 
-    NSDate *object = _objects[indexPath.row];
-    cell.textLabel.text = [object description];
+   
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) {
+        return 329;
+    }
+    
+    return 44;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
