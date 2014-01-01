@@ -12,11 +12,19 @@
 @class ServerObj;
 @class Services;
 @class Profile;
+@class Charity;
+@class StepsManager;
+@class LogObj;
+@class LogViewController;
 
 extern ServerObj* serverObj;
 extern Services* services;
 extern Profile* profile;
+extern Charity* activeDonor;
+extern StepsManager* stepsManager;
+extern LogObj* logObj;
+extern LogViewController* logView;
 
-// Testing Push
+extern NSString* getDocPath(NSString* fileName);
 
 #endif

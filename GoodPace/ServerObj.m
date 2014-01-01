@@ -9,6 +9,10 @@
 #import "ServerObj.h"
 #import "Profile.h"
 #import "Globals.h"
+#import "StepsManager.h"
+
+static NSString* profileFile = @"user_profile";
+static const int SAVE_TIMER_INT = 1;
 
 @implementation ServerObj
 
@@ -24,24 +28,45 @@
 }
 
 - (void) start {
-    
+
+    // Load Profile
     if (!profile) {
-        profile = [[Profile alloc] init];
-        [profile load];
+        profile = [Profile loadFromArchive];
+       
+       if (!profile) {
+           profile = [[Profile alloc] init];
+       }
     }
     
+    [self startTimer];
 }
 
 - (void) stop {
-    
+    [saveTimer invalidate];
+    [profile save];
 }
 
 - (void) resume {
-    
+    [self startTimer];
 }
 
 - (void) suspend {
-    
+    [saveTimer invalidate];
+    [profile save];
+}
+
+- (void) startTimer {
+    if (!saveTimer) {
+        saveTimer = [NSTimer scheduledTimerWithTimeInterval:SAVE_TIMER_INT
+                                                     target:self
+                                                   selector:@selector(timerFireMethod:)
+                                                   userInfo:nil
+                                                    repeats:YES];
+    }
+}
+
+- (void)timerFireMethod:(NSTimer *)timer {
+    [profile save];
 }
 
 @end

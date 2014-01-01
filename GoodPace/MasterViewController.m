@@ -13,134 +13,145 @@
 #import "Globals.h"
 #import "Charity.h"
 
-@interface MasterViewController () {
-    NSMutableArray *_objects;
-}
-@end
+static const int NUM_SECTIONS = 1;
+static const int TOP_IMG = 0;
+static const int TOP_IMG_HEIGHT = 329;
+
 
 @implementation MasterViewController
 
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
-    
-    self.tableView.frame = CGRectMake(0,200,320,188);
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)insertNewObject:(id)sender
-{
-    if (!_objects) {
-        _objects = [[NSMutableArray alloc] init];
-    }
-    [_objects insertObject:[NSDate date] atIndex:0];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
 #pragma mark - Table View
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return NUM_SECTIONS;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    NSArray* charities = profile.getCharities;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    if (charities) {
-        return [charities count] + 1;
+    int numRows = 0;
+
+    if(!fromWalkScreen) {
+        numRows = 1;
     }
     
-    return 1;
+    if (charities) {
+        numRows += [charities count];
+    }
+    
+    return numRows;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
-    if (indexPath.row == 0) {
-        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(3,2, 319, 329)];
+    if ( !fromWalkScreen && (indexPath.row == TOP_IMG)) {
+        UIImageView *imv = [[UIImageView alloc]initWithFrame:CGRectMake(0,0, 321, TOP_IMG_HEIGHT)];
         imv.image=[UIImage imageNamed:@"startImage.png"];
         [cell.contentView addSubview:imv];
     }
     else {
-        NSArray* charities = profile.getCharities;
+        long donorIndex = indexPath.row;
+        if (!fromWalkScreen) {
+            donorIndex--;
+        }
         
-        Charity* charity = (Charity*) [charities objectAtIndex:indexPath.row - 1];
+        Charity* charity = (Charity*) [charities objectAtIndex:donorIndex];
         
+        // Top Line
         cell.textLabel.text = charity.name;
-        [cell.imageView setImage:[UIImage imageNamed:charity.iconPath]];
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+        cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        cell.textLabel.numberOfLines = 0;
+        
+        // Subtitle
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"      %@\t\t$%@", charity.joined, charity.moneyRaised];
+        cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:12];
+        cell.detailTextLabel.textColor = [UIColor greenColor];
+        
+        if (fromWalkScreen) {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        
+        // Walking Man little image
+        UIImageView* imv = [[UIImageView alloc]initWithFrame:CGRectMake(0,0, 16, 16)];
+        imv.image = walkManImg;
+        [cell.detailTextLabel addSubview:imv];
+
+        [cell.imageView setImage:charity.icon];
     }
 
-   
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 0) {
-        return 329;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (fromWalkScreen) {
+        activeDonor = charities[indexPath.row];
+        
+        [detailViewController setData:YES walkInfoView:nil];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (!fromWalkScreen && (indexPath.row == TOP_IMG)) {
+        return TOP_IMG_HEIGHT;
     }
     
-    return 44;
+    return 54;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
+#pragma mark - View
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_objects removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if (fromWalkScreen) {
+        return NO;
     }
+
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    return indexPath.row != TOP_IMG;
 }
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = _objects[indexPath.row];
-        [[segue destinationViewController] setDetailItem:object];
+        
+        activeDonor = charities[indexPath.row - 1];
+        
+        DetailViewController* _detailViewController = (DetailViewController*) [segue destinationViewController];
+        [_detailViewController setData:NO walkInfoView:nil];
     }
 }
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    charities = [[profile getCharities] allValues];
+    
+    if (!walkManImg ){
+        walkManImg = [UIImage imageNamed:@"walkMan.png"];
+    }
+    
+    if (fromWalkScreen) {
+        self.navItem.title = NSLocalizedString(@"Charities", nil);
+    }
+}
+
+#pragma mark - Misc
+
+- (void) setFromWalkScreen:(DetailViewController*) _detailViewController {
+    fromWalkScreen = YES;
+    detailViewController = _detailViewController;
+}
+
 
 @end

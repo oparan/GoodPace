@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "Service.h"
 
-@interface ServerObj : NSObject <Service>
+@interface ServerObj : NSObject <Service> {
+    @private
+    NSTimer* saveTimer;
+}
 
 - (void) start;
 - (void) stop;

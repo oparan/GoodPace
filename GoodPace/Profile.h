@@ -6,18 +6,28 @@
 //  Copyright (c) 2013 eBay. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@class Pledges;
+@class Charities;
+@class MyCharity;
 
-#import "Charities.h"
-
-@interface Profile : NSObject {
+@interface Profile : NSObject <NSCoding> {
     @private
-    Charities* charitiesObj;
+    NSMutableDictionary* charities;
     
+    @private
+    NSMutableDictionary* myCharities;
 }
 
-@property (readonly, getter = getCharities) NSArray* charities;
+@property (readonly, getter = getCharities) NSDictionary* charities;
 
-- (void) load;
+@property  id<FBGraphUser> fbUser;
+@property  (nonatomic) UIImage* userImg;
+
++ (id) loadFromArchive;
+
+- (void) save;
+- (void) addMyCharity:(NSString*) name;
+- (MyCharity*) myCharityByName:(NSString*) charityName;
+
 
 @end

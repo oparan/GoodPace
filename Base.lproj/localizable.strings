@@ -1,0 +1,19 @@
+/* 
+  localizable.strings
+  GoodPace
+
+  Created by Paran, Omer on 12/22/13.
+  Copyright (c) 2013 eBay. All rights reserved.
+*/
+
+"joined" = "joined";
+"raised" = "raised";
+"done" = "Done";
+"Charities" = "Charities";
+"Take photo" = "Take photo";
+"Choose Existing" = "Choose Existing";
+"Use Facebook Profile" = "Use Facebook Profile";
+"Send an email" = "Send an email";
+"Share on Facebook" = "Share on Facebook";
+"Share on Twitter" = "Share on Twitter";
+"cancel" = "cancel";

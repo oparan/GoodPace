@@ -8,15 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Charity : NSObject
+@interface Charity : NSObject  <NSCoding>
 
-    @property NSString* iconPath;
+    @property UIImage* icon;
     @property NSString* name;
-    @property NSString* steps;
+    @property NSString* joined;
     @property NSString* moneyRaised;
+    @property NSString* description;
+    @property NSString* url;
+    @property NSString* stepsPerDollar;
 
-- (id)initWithValues:(NSString *) name steps:(NSString *)steps moneyRaised:(NSString *)moneyRaised
-            iconPath:(NSString *)iconPath;
-
+- (id)initWithValues:(NSString *) name  description:(NSString*) description joined:(NSString *)joined moneyRaised:(NSString *)moneyRaised
+            iconPath:(NSString *)icon url:(NSString*)url;
 
 @end

@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 eBay. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 @protocol Service <NSObject>
 
 - (void) start;

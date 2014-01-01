@@ -7,6 +7,11 @@
 //
 
 #import "DetailViewController.h"
+#import "MasterViewController.h"
+#import "WalkInfoViewController.h"
+
+#import "Charity.h"
+#import "Globals.h"
 
 @interface DetailViewController ()
 - (void)configureView;
@@ -16,36 +21,65 @@
 
 #pragma mark - Managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
-{
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
+- (void)setData:(BOOL) fromWalkScreen walkInfoView:(WalkInfoViewController*) _walkInfoView {
+    self.fromWalkScreen = fromWalkScreen;
         
-        // Update the view.
-        [self configureView];
+    if (_walkInfoView) {
+        walkInfoView = _walkInfoView;
     }
-}
-
-- (void)configureView
-{
-    // Update the user interface for the detail item.
-
-    if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
-    }
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+        
+    // Update the view.
     [self configureView];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)configureView {
+    // Update the user interface for the detail item.
+
+    self.nameLabel.text = activeDonor.name;
+        
+    self.joined.text = [NSString stringWithFormat:@"%@ %@", activeDonor.joined, NSLocalizedString(@"joined", nil)];
+        
+    self.raised.text = [NSString stringWithFormat:@"$%@ %@", activeDonor.moneyRaised, NSLocalizedString(@"raised", nil)];
+    self.desc.text = [NSString stringWithFormat:@"%@\n\n%@", activeDonor.description , activeDonor.url];
+
+    [self.icon setImage:activeDonor.icon];
+        
+    self.continueButton.hidden = self.fromWalkScreen;
+    self.chooseDifferentButton.hidden = !self.fromWalkScreen;
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    
+    return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if (!self.fromWalkScreen) {
+    }
+    else {
+        MasterViewController* donorsListCtrl = (MasterViewController*) [segue destinationViewController];
+        [donorsListCtrl setFromWalkScreen:self];
+    }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self configureView];
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewWillDisappear:animated];
+    
+    // If are removed , update the walk screen if we got here from the walk screen
+    //if (walkInfoView && self.fromWalkScreen && ![[self.navigationController viewControllers] containsObject:self]) {
+      //  [walkInfoView setData:self.charity];
+//    }
 }
 
 @end
