@@ -10,6 +10,7 @@
 #import "IPhone5SStepsCounter.h"
 #import "Globals.h"
 #import "LogObj.h"
+#import "ICEMotionMonitor.h"
 
 @implementation StepsManager
 
@@ -25,14 +26,14 @@
                                                    selector:@selector(timerFireMethod:)
                                                    userInfo:nil
                                                     repeats:YES];*/
-
-        if ([CMStepCounter isStepCountingAvailable]) {
-            if (!iPhone5SStepsCounter) {
-                iPhone5SStepsCounter = [[IPhone5SStepsCounter alloc] init];
+        
+        ICEMotionMonitor* monitor = [ICEMotionMonitor sharedMonitor];
+        [monitor startStepsCountingWithHandler:^(NSInteger numberOfCountedSteps) {
+            if(stepsHandler!=nil){
+                [stepsHandler update:numberOfCountedSteps];
             }
-            
-            [iPhone5SStepsCounter start];
-        }
+        } updateEvery:1];
+
     }
     else if (messaureBy == eFitBit) {
     }

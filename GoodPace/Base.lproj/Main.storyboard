@@ -241,6 +241,26 @@
             </objects>
             <point key="canvasLocation" x="1864" y="884"/>
         </scene>
+        <!--Motion Graph View Controller-->
+        <scene sceneID="eIA-Xx-c1N">
+            <objects>
+                <viewController id="DCu-Ih-7KF" customClass="ICEMotionGraphViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Imq-sW-2vl"/>
+                        <viewControllerLayoutGuide type="bottom" id="pzX-hN-ceT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="pKI-cj-bmx">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sha-3C-Lac" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="1Lz-Kd-TVB"/>
+                <swipeGestureRecognizer direction="left" id="MUE-Di-p2u"/>
+            </objects>
+            <point key="canvasLocation" x="2380" y="876"/>
+        </scene>
         <!--Profile View Controller - Create a Profile-->
         <scene sceneID="WOW-xP-37v">
             <objects>
@@ -290,8 +310,8 @@
                                     <outlet property="delegate" destination="wUH-GG-MBU" id="iIn-8R-oY5"/>
                                 </connections>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ark-kN-ucb">
-                                <rect key="frame" x="17" y="507" width="289" height="48"/>
+                            <button opaque="NO" contentMode="bottom" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ark-kN-ucb">
+                                <rect key="frame" x="20" y="500" width="289" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="startWalking.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -311,6 +331,9 @@
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Bxu-I3-43S" firstAttribute="top" secondItem="Ark-kN-ucb" secondAttribute="bottom" constant="20" id="UpS-kR-x0b"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Create a Profile" id="Pxg-Sz-wyV">
                         <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="Koe-59-IAX">
@@ -349,7 +372,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="jUr-3t-vfg"/>
         <segue reference="zif-XC-y0Y"/>
+        <segue reference="ilq-jR-GQl"/>
     </inferredMetricsTieBreakers>
 </document>

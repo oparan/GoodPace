@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		332258531875745E00872CFA /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 332258501875741400872CFA /* libCorePlot-CocoaTouch.a */; };
+		3322585B18757CA900872CFA /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3322585A18757CA900872CFA /* FacebookSDK.framework */; };
+		33454C9A1875674B0043FA85 /* AccelerometerFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C8F1875674B0043FA85 /* AccelerometerFilter.m */; };
+		33454C9B1875674B0043FA85 /* ICE3DVector.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C911875674B0043FA85 /* ICE3DVector.m */; };
+		33454C9C1875674B0043FA85 /* ICEMotionData.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C931875674B0043FA85 /* ICEMotionData.m */; };
+		33454C9D1875674B0043FA85 /* ICEMotionMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C951875674B0043FA85 /* ICEMotionMonitor.m */; };
+		33454C9E1875674B0043FA85 /* ICEMotionRecords.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C971875674B0043FA85 /* ICEMotionRecords.m */; };
+		33724203187580CC0068342C /* ICEMotionGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33724202187580CC0068342C /* ICEMotionGraphViewController.m */; };
+		33FEDE3B1875B3260001DB6E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33FEDE3A1875B3260001DB6E /* QuartzCore.framework */; };
 		7D15528D186AE26E0003EB2C /* walkInfoFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D15528C186AE26E0003EB2C /* walkInfoFrame.png */; };
 		7D155290186AE3970003EB2C /* WalkInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D15528F186AE3970003EB2C /* WalkInfoViewController.m */; };
 		7D155293186AE4E50003EB2C /* Pledge.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D155292186AE4E50003EB2C /* Pledge.m */; };
@@ -57,10 +66,23 @@
 		7DE92ECF18671D390078A0E6 /* localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DE92ED118671D390078A0E6 /* localizable.strings */; };
 		7DE92ED31867321B0078A0E6 /* jointhiswalk.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE92ED21867321B0078A0E6 /* jointhiswalk.png */; };
 		7DE92ED6186735250078A0E6 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE92ED5186735250078A0E6 /* ProfileViewController.m */; };
-		7DE92EDB1867457C0078A0E6 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE92EDA1867457C0078A0E6 /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3322584F1875741400872CFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 332258491875741400872CFA /* CorePlot-CocoaTouch.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BC9B83470FB8A0A40035D8DA;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
+		332258511875742A00872CFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 332258491875741400872CFA /* CorePlot-CocoaTouch.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BC9B83460FB8A0A40035D8DA;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
 		7D89833D186094E500CB7D55 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7D89830C186094E400CB7D55 /* Project object */;
@@ -71,6 +93,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		332258491875741400872CFA /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "../../CorePlot_1.4/Source/framework/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
+		3322585A18757CA900872CFA /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		33454C8E1875674B0043FA85 /* AccelerometerFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerFilter.h; sourceTree = "<group>"; };
+		33454C8F1875674B0043FA85 /* AccelerometerFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerFilter.m; sourceTree = "<group>"; };
+		33454C901875674B0043FA85 /* ICE3DVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICE3DVector.h; sourceTree = "<group>"; };
+		33454C911875674B0043FA85 /* ICE3DVector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICE3DVector.m; sourceTree = "<group>"; };
+		33454C921875674B0043FA85 /* ICEMotionData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICEMotionData.h; sourceTree = "<group>"; };
+		33454C931875674B0043FA85 /* ICEMotionData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionData.m; sourceTree = "<group>"; };
+		33454C941875674B0043FA85 /* ICEMotionMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICEMotionMonitor.h; sourceTree = "<group>"; };
+		33454C951875674B0043FA85 /* ICEMotionMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionMonitor.m; sourceTree = "<group>"; };
+		33454C961875674B0043FA85 /* ICEMotionRecords.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICEMotionRecords.h; sourceTree = "<group>"; };
+		33454C971875674B0043FA85 /* ICEMotionRecords.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionRecords.m; sourceTree = "<group>"; };
+		33724201187580CC0068342C /* ICEMotionGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICEMotionGraphViewController.h; sourceTree = "<group>"; };
+		33724202187580CC0068342C /* ICEMotionGraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionGraphViewController.m; sourceTree = "<group>"; };
+		33FEDE3A1875B3260001DB6E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7D15528C186AE26E0003EB2C /* walkInfoFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkInfoFrame.png; sourceTree = "<group>"; };
 		7D15528E186AE3970003EB2C /* WalkInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WalkInfoViewController.h; sourceTree = "<group>"; };
 		7D15528F186AE3970003EB2C /* WalkInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WalkInfoViewController.m; sourceTree = "<group>"; };
@@ -143,7 +180,6 @@
 		7DE92ED21867321B0078A0E6 /* jointhiswalk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jointhiswalk.png; sourceTree = "<group>"; };
 		7DE92ED4186735250078A0E6 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		7DE92ED5186735250078A0E6 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
-		7DE92EDA1867457C0078A0E6 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,11 +187,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33FEDE3B1875B3260001DB6E /* QuartzCore.framework in Frameworks */,
+				3322585B18757CA900872CFA /* FacebookSDK.framework in Frameworks */,
 				7DC528E01870877800A04592 /* CoreMotion.framework in Frameworks */,
 				7D89831A186094E400CB7D55 /* CoreGraphics.framework in Frameworks */,
-				7DE92EDB1867457C0078A0E6 /* FacebookSDK.framework in Frameworks */,
 				7D89831C186094E400CB7D55 /* UIKit.framework in Frameworks */,
 				7D898318186094E400CB7D55 /* Foundation.framework in Frameworks */,
+				332258531875745E00872CFA /* libCorePlot-CocoaTouch.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,6 +210,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3322584A1875741400872CFA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				332258501875741400872CFA /* libCorePlot-CocoaTouch.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		33454C8C187567370043FA85 /* MotionMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				33724201187580CC0068342C /* ICEMotionGraphViewController.h */,
+				33724202187580CC0068342C /* ICEMotionGraphViewController.m */,
+				33454C8D1875674B0043FA85 /* model */,
+			);
+			name = MotionMonitor;
+			sourceTree = "<group>";
+		};
+		33454C8D1875674B0043FA85 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				33454C8E1875674B0043FA85 /* AccelerometerFilter.h */,
+				33454C8F1875674B0043FA85 /* AccelerometerFilter.m */,
+				33454C901875674B0043FA85 /* ICE3DVector.h */,
+				33454C911875674B0043FA85 /* ICE3DVector.m */,
+				33454C921875674B0043FA85 /* ICEMotionData.h */,
+				33454C931875674B0043FA85 /* ICEMotionData.m */,
+				33454C941875674B0043FA85 /* ICEMotionMonitor.h */,
+				33454C951875674B0043FA85 /* ICEMotionMonitor.m */,
+				33454C961875674B0043FA85 /* ICEMotionRecords.h */,
+				33454C971875674B0043FA85 /* ICEMotionRecords.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		7D597E251869A3D2003DBC04 /* Imports */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +288,7 @@
 		7D89830B186094E400CB7D55 = {
 			isa = PBXGroup;
 			children = (
+				332258491875741400872CFA /* CorePlot-CocoaTouch.xcodeproj */,
 				7D89831D186094E400CB7D55 /* GoodPace */,
 				7D89833F186094E500CB7D55 /* GoodPaceTests */,
 				7D898316186094E400CB7D55 /* Frameworks */,
@@ -234,8 +308,9 @@
 		7D898316186094E400CB7D55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				33FEDE3A1875B3260001DB6E /* QuartzCore.framework */,
+				3322585A18757CA900872CFA /* FacebookSDK.framework */,
 				7DC528DF1870877800A04592 /* CoreMotion.framework */,
-				7DE92EDA1867457C0078A0E6 /* FacebookSDK.framework */,
 				7D898317186094E400CB7D55 /* Foundation.framework */,
 				7D898319186094E400CB7D55 /* CoreGraphics.framework */,
 				7D89831B186094E400CB7D55 /* UIKit.framework */,
@@ -247,6 +322,7 @@
 		7D89831D186094E400CB7D55 /* GoodPace */ = {
 			isa = PBXGroup;
 			children = (
+				33454C8C187567370043FA85 /* MotionMonitor */,
 				7D9E86B71861F1BD0039A747 /* Images - Temp */,
 				7D9E869F1861D12D0039A747 /* DS */,
 				7D8983611860B6AA00CB7D55 /* Utils */,
@@ -377,6 +453,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				332258521875742A00872CFA /* PBXTargetDependency */,
 			);
 			name = GoodPace;
 			productName = GoodPace;
@@ -437,6 +514,12 @@
 			mainGroup = 7D89830B186094E400CB7D55;
 			productRefGroup = 7D898315186094E400CB7D55 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3322584A1875741400872CFA /* Products */;
+					ProjectRef = 332258491875741400872CFA /* CorePlot-CocoaTouch.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				7D898313186094E400CB7D55 /* GoodPace */,
@@ -444,6 +527,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		332258501875741400872CFA /* libCorePlot-CocoaTouch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libCorePlot-CocoaTouch.a";
+			remoteRef = 3322584F1875741400872CFA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7D898312186094E400CB7D55 /* Resources */ = {
@@ -492,13 +585,19 @@
 			files = (
 				7D5303CE186C370100EBADAF /* MyCharity.m in Sources */,
 				7D155290186AE3970003EB2C /* WalkInfoViewController.m in Sources */,
+				33454C9B1875674B0043FA85 /* ICE3DVector.m in Sources */,
 				7D9E86A21861D19F0039A747 /* Profile.m in Sources */,
 				7D8983641860B6BB00CB7D55 /* ServerObj.m in Sources */,
+				33724203187580CC0068342C /* ICEMotionGraphViewController.m in Sources */,
 				7D155293186AE4E50003EB2C /* Pledge.m in Sources */,
+				33454C9E1875674B0043FA85 /* ICEMotionRecords.m in Sources */,
 				7D4BEF9A1871870D00EBCEC2 /* LogViewController.m in Sources */,
 				7D9E869A18619F060039A747 /* Globals.m in Sources */,
 				7D898328186094E400CB7D55 /* AppDelegate.m in Sources */,
+				33454C9C1875674B0043FA85 /* ICEMotionData.m in Sources */,
 				7D4BEFA01873088100EBCEC2 /* Facebook.m in Sources */,
+				33454C9A1875674B0043FA85 /* AccelerometerFilter.m in Sources */,
+				33454C9D1875674B0043FA85 /* ICEMotionMonitor.m in Sources */,
 				7DC528D918707DF200A04592 /* StepsManager.m in Sources */,
 				7D89832E186094E400CB7D55 /* MasterViewController.m in Sources */,
 				7D8983601860B2ED00CB7D55 /* Charity.m in Sources */,
@@ -523,6 +622,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		332258521875742A00872CFA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CorePlot-CocoaTouch";
+			targetProxy = 332258511875742A00872CFA /* PBXContainerItemProxy */;
+		};
 		7D89833E186094E500CB7D55 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7D898313186094E400CB7D55 /* GoodPace */;
@@ -648,16 +752,21 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/oparan/Desktop/GoodPace,
-					/Users/oparan/Documents/FacebookSDK,
+					/Users/rosteiner/Documents/Workspace/GoodPaceLogic/Initial,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GoodPace/GoodPace-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = "GoodPace/GoodPace-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "/Users/rosteiner/Documents/Workspace/CorePlot_1.4/Source/framework/**";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -671,16 +780,21 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/oparan/Desktop/GoodPace,
-					/Users/oparan/Documents/FacebookSDK,
+					/Users/rosteiner/Documents/Workspace/GoodPaceLogic/Initial,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GoodPace/GoodPace-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = "GoodPace/GoodPace-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "/Users/rosteiner/Documents/Workspace/CorePlot_1.4/Source/framework/**";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -17,6 +17,9 @@
 #import "LogViewController.h"
 #import "LogObj.h"
 #import "Facebook.h"
+#import "ICEMotionMonitor.h"
+
+//#import "CorePlot-CocoaTouch.h"
 
 static const int NUM_SECTIONS = 1;
 static const int NUM_FIXED_ROWS = 4;
@@ -244,6 +247,7 @@ static const int eTwitterIndex = 2;
 
 - (void) update:(NSInteger) steps {
     stepsLabel.text = [NSString stringWithFormat:@"%d /", [myCharity.steps intValue] + (int) steps];
+    [stepsLabel setNeedsDisplay];
 //    stepsLabel.text = [NSString stringWithFormat:@"%d",  steps];
     [myCharity addSteps:(int) steps];
 }
@@ -334,7 +338,7 @@ static const int eTwitterIndex = 2;
             break;
             
         case eFaceBookIndex:
-            [Facebook share];
+            [ICEFacebook share];
             break;
             
         case eTwitterIndex:
@@ -347,6 +351,8 @@ static const int eTwitterIndex = 2;
 
 - (void) showLogView {
 
+    ICEMotionMonitor* monitor = [ICEMotionMonitor sharedMonitor];
+    [monitor stopStepsCounting];
     LogViewController*  logViewController = [[LogViewController alloc] init];
     logViewController.view.backgroundColor = [UIColor whiteColor];
     [self.navigationController pushViewController:logViewController animated:YES];

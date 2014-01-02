@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 eBay. All rights reserved.
 //
 
-@interface Facebook : NSObject
+@interface ICEFacebook : NSObject
 
 + (void) share;
 

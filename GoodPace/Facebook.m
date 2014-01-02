@@ -8,7 +8,7 @@
 
 #import "Facebook.h"
 
-@implementation Facebook
+@implementation ICEFacebook
 
 + (void) share {
 
@@ -22,9 +22,9 @@
     
     // If the Facebook app is installed and we can present the share dialog
     if ([FBDialogs canPresentShareDialogWithParams:params]) {
-        [Facebook showShareDlg:params];
+        [ICEFacebook showShareDlg:params];
     } else {
-        [Facebook showWebShareDlg];
+        [ICEFacebook showWebShareDlg];
     }
 }
 
