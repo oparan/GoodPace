@@ -9,7 +9,6 @@
 #import "LogViewController.h"
 #import "Globals.h"
 #import "LogObj.h"
-#import "ICEMotionGraphViewController.h"
 
 
 @interface LogViewController ()
