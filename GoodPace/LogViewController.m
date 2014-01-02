@@ -29,18 +29,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [UI addRightButton:self title:@"Graphs" action:@selector(showGraphView)];
     
     self.logView = [[UITextView alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width,self.view.frame.size.height)];
     [self.view addSubview:self.logView];
 }
 
-- (void) showGraphView {
-    
-    ICEMotionGraphViewController*  graphViewController = [[ICEMotionGraphViewController alloc] init];
-    graphViewController.view.backgroundColor = [UIColor whiteColor];
-    [self.navigationController pushViewController:graphViewController animated:YES];
-}
+
 
 - (void) viewWillAppear:(BOOL)animated  {
     logView = self;
