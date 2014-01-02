@@ -28,6 +28,7 @@
                                                     repeats:YES];*/
         
         ICEMotionMonitor* monitor = [ICEMotionMonitor sharedMonitor];
+        [monitor stopStepsCounting];
         [monitor startStepsCountingWithHandler:^(NSInteger numberOfCountedSteps) {
             if(stepsHandler!=nil){
                 [stepsHandler update:numberOfCountedSteps];

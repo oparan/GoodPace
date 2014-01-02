@@ -560,6 +560,7 @@ static ICEMotionMonitor* instance;
 {
     [stepsCounter startStepCountingUpdatesToQueue:[NSOperationQueue mainQueue] updateOn:1 withHandler:^(NSInteger numberOfSteps, NSDate *timestamp, NSError *error) {
         countedSteps=numberOfSteps;
+        NSLog(@"countStepsUsingStepCounter - reporting %d steps.", countedSteps);
     } ];
 }
 
