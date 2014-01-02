@@ -75,7 +75,7 @@
     min= MIN(accelerationSegment.startTime, gyroSegment.startTime);
     max = MAX((accelerationSegment.endTime-accelerationSegment.startTime), (gyroSegment.endTime-gyroSegment.startTime));
     CPTPlotRange * rangeX = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble (min) length:CPTDecimalFromDouble(max)];
-    NSLog(@"\n\n-range X: %@ range Y: %@",rangeX,rangeY);
+    //NSLog(@"\n\n-range X: %@ range Y: %@",rangeX,rangeY);
     
     [plotSpace setXRange:rangeX];
     [plotSpace setYRange:rangeY];

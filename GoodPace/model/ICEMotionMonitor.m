@@ -529,7 +529,7 @@ static ICEMotionMonitor* instance;
         [countedStepsHandlerTimer invalidate];
         countedStepsHandlerTimer=nil;
     }
-    countedStepsHandlerTimer = [NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(reportCurrentCountToHandler) userInfo:nil repeats:YES];
+    countedStepsHandlerTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reportCurrentCountToHandler) userInfo:nil repeats:YES];
     
     [self startStepsCounting];
     
@@ -543,13 +543,14 @@ static ICEMotionMonitor* instance;
     if(!CMStepCounter.isStepCountingAvailable){
     
         BOOL isAccelerating = accelerating;
-        ICEMotionSegmentAnalyzer* analyzer = [[ICEMotionSegmentAnalyzer alloc] init];
+        ICEMotionSegmentAnalyzer* analyzer = [ICEMotionSegmentAnalyzer analizerWithValidator:[self bestAnalyzer].stepValidator];
         
         ICEMotionSegmentAnalysisResult *result = [analyzer analyzeSegment:[self.accelerationRecords.motionSegments lastObject] currentlyAccelerating:isAccelerating expectedStepsMin:3 expectedMax:20];
         countedSteps = self.stepsCountAccelerometer+result.countedSteps;
         
     }
-  countedStepsHandler.handler(countedSteps);
+    NSLog(@"reportCurrentCountToHandler - reporting %d steps.", countedSteps);
+    countedStepsHandler.handler(countedSteps);
     
     
 }
@@ -739,7 +740,7 @@ static ICEMotionMonitor* instance;
 
 -(unsigned long) stepsCountAccelerometer
 {
-    return MAX(self.stepsCountAccelerometerLows, self.stepsCountAccelerometerHighs);
+    return MIN(self.stepsCountAccelerometerLows, self.stepsCountAccelerometerHighs);
 }
 
 -(unsigned long) stepsCountStepsCounter
