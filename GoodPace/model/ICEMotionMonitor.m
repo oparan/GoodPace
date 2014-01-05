@@ -549,7 +549,7 @@ static ICEMotionMonitor* instance;
         countedSteps = self.stepsCountAccelerometer+result.countedSteps;
         
     }
-    NSLog(@"reportCurrentCountToHandler - reporting %d steps.", countedSteps);
+    NSLog(@"reportCurrentCountToHandler - reporting %ld steps.", (long)countedSteps);
     countedStepsHandler.handler(countedSteps);
     
     
@@ -560,7 +560,7 @@ static ICEMotionMonitor* instance;
 {
     [stepsCounter startStepCountingUpdatesToQueue:[NSOperationQueue mainQueue] updateOn:1 withHandler:^(NSInteger numberOfSteps, NSDate *timestamp, NSError *error) {
         countedSteps=numberOfSteps;
-        NSLog(@"countStepsUsingStepCounter - reporting %d steps.", countedSteps);
+        NSLog(@"countStepsUsingStepCounter - reporting %ld steps.", (long)countedSteps);
     } ];
 }
 
