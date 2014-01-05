@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3322585B18757CA900872CFA /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3322585A18757CA900872CFA /* FacebookSDK.framework */; };
 		33454C9A1875674B0043FA85 /* AccelerometerFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C8F1875674B0043FA85 /* AccelerometerFilter.m */; };
 		33454C9B1875674B0043FA85 /* ICE3DVector.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C911875674B0043FA85 /* ICE3DVector.m */; };
 		33454C9C1875674B0043FA85 /* ICEMotionData.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C931875674B0043FA85 /* ICEMotionData.m */; };
 		33454C9D1875674B0043FA85 /* ICEMotionMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C951875674B0043FA85 /* ICEMotionMonitor.m */; };
 		33454C9E1875674B0043FA85 /* ICEMotionRecords.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C971875674B0043FA85 /* ICEMotionRecords.m */; };
 		33FEDE3B1875B3260001DB6E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33FEDE3A1875B3260001DB6E /* QuartzCore.framework */; };
+		7D08CD0518796B6A0005E18B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D08CD0418796B6A0005E18B /* FacebookSDK.framework */; };
 		7D15528D186AE26E0003EB2C /* walkInfoFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D15528C186AE26E0003EB2C /* walkInfoFrame.png */; };
 		7D155290186AE3970003EB2C /* WalkInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D15528F186AE3970003EB2C /* WalkInfoViewController.m */; };
 		7D155293186AE4E50003EB2C /* Pledge.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D155292186AE4E50003EB2C /* Pledge.m */; };
@@ -77,7 +77,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3322585A18757CA900872CFA /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		33454C8E1875674B0043FA85 /* AccelerometerFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerFilter.h; sourceTree = "<group>"; };
 		33454C8F1875674B0043FA85 /* AccelerometerFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerFilter.m; sourceTree = "<group>"; };
 		33454C901875674B0043FA85 /* ICE3DVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICE3DVector.h; sourceTree = "<group>"; };
@@ -89,6 +88,7 @@
 		33454C961875674B0043FA85 /* ICEMotionRecords.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICEMotionRecords.h; sourceTree = "<group>"; };
 		33454C971875674B0043FA85 /* ICEMotionRecords.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionRecords.m; sourceTree = "<group>"; };
 		33FEDE3A1875B3260001DB6E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7D08CD0418796B6A0005E18B /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		7D15528C186AE26E0003EB2C /* walkInfoFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkInfoFrame.png; sourceTree = "<group>"; };
 		7D15528E186AE3970003EB2C /* WalkInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WalkInfoViewController.h; sourceTree = "<group>"; };
 		7D15528F186AE3970003EB2C /* WalkInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WalkInfoViewController.m; sourceTree = "<group>"; };
@@ -169,11 +169,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				33FEDE3B1875B3260001DB6E /* QuartzCore.framework in Frameworks */,
-				3322585B18757CA900872CFA /* FacebookSDK.framework in Frameworks */,
 				7DC528E01870877800A04592 /* CoreMotion.framework in Frameworks */,
 				7D89831A186094E400CB7D55 /* CoreGraphics.framework in Frameworks */,
 				7D89831C186094E400CB7D55 /* UIKit.framework in Frameworks */,
 				7D898318186094E400CB7D55 /* Foundation.framework in Frameworks */,
+				7D08CD0518796B6A0005E18B /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,8 +277,8 @@
 		7D898316186094E400CB7D55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7D08CD0418796B6A0005E18B /* FacebookSDK.framework */,
 				33FEDE3A1875B3260001DB6E /* QuartzCore.framework */,
-				3322585A18757CA900872CFA /* FacebookSDK.framework */,
 				7DC528DF1870877800A04592 /* CoreMotion.framework */,
 				7D898317186094E400CB7D55 /* Foundation.framework */,
 				7D898319186094E400CB7D55 /* CoreGraphics.framework */,
@@ -698,7 +698,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/rosteiner/Documents/Workspace/GoodPaceLogic/Initial,
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GoodPace/GoodPace-Prefix.pch";
@@ -726,7 +726,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/rosteiner/Documents/Workspace/GoodPaceLogic/Initial,
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GoodPace/GoodPace-Prefix.pch";
