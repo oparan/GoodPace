@@ -14,6 +14,7 @@
 		33454C9C1875674B0043FA85 /* ICEMotionData.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C931875674B0043FA85 /* ICEMotionData.m */; };
 		33454C9D1875674B0043FA85 /* ICEMotionMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C951875674B0043FA85 /* ICEMotionMonitor.m */; };
 		33454C9E1875674B0043FA85 /* ICEMotionRecords.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C971875674B0043FA85 /* ICEMotionRecords.m */; };
+		334E4F6218794B4100F89B25 /* ICELogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 334E4F6118794B4100F89B25 /* ICELogger.m */; };
 		33724203187580CC0068342C /* ICEMotionGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33724202187580CC0068342C /* ICEMotionGraphViewController.m */; };
 		33FEDE3B1875B3260001DB6E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33FEDE3A1875B3260001DB6E /* QuartzCore.framework */; };
 		7D15528D186AE26E0003EB2C /* walkInfoFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D15528C186AE26E0003EB2C /* walkInfoFrame.png */; };
@@ -105,6 +106,8 @@
 		33454C951875674B0043FA85 /* ICEMotionMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionMonitor.m; sourceTree = "<group>"; };
 		33454C961875674B0043FA85 /* ICEMotionRecords.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICEMotionRecords.h; sourceTree = "<group>"; };
 		33454C971875674B0043FA85 /* ICEMotionRecords.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionRecords.m; sourceTree = "<group>"; };
+		334E4F6018794B4100F89B25 /* ICELogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICELogger.h; sourceTree = "<group>"; };
+		334E4F6118794B4100F89B25 /* ICELogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICELogger.m; sourceTree = "<group>"; };
 		33724201187580CC0068342C /* ICEMotionGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICEMotionGraphViewController.h; sourceTree = "<group>"; };
 		33724202187580CC0068342C /* ICEMotionGraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionGraphViewController.m; sourceTree = "<group>"; };
 		33FEDE3A1875B3260001DB6E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -288,6 +291,8 @@
 		7D89830B186094E400CB7D55 = {
 			isa = PBXGroup;
 			children = (
+				334E4F6018794B4100F89B25 /* ICELogger.h */,
+				334E4F6118794B4100F89B25 /* ICELogger.m */,
 				332258491875741400872CFA /* CorePlot-CocoaTouch.xcodeproj */,
 				7D89831D186094E400CB7D55 /* GoodPace */,
 				7D89833F186094E500CB7D55 /* GoodPaceTests */,
@@ -600,6 +605,7 @@
 				33454C9D1875674B0043FA85 /* ICEMotionMonitor.m in Sources */,
 				7DC528D918707DF200A04592 /* StepsManager.m in Sources */,
 				7D89832E186094E400CB7D55 /* MasterViewController.m in Sources */,
+				334E4F6218794B4100F89B25 /* ICELogger.m in Sources */,
 				7D8983601860B2ED00CB7D55 /* Charity.m in Sources */,
 				7D898324186094E400CB7D55 /* main.m in Sources */,
 				7D4BEF9D1871878F00EBCEC2 /* LogObj.m in Sources */,

@@ -36,7 +36,10 @@ typedef NS_ENUM(NSInteger, ICELogLevel){ICELoggerLevelVerbose=0L, ICELoggerLevel
 
 @end
 
+
+
 static NSMutableArray* logs;
+
 @implementation ICELogger
 
 +(void)log: (ICELogLevel) level tag:(NSString*) aTag line:(NSString*) aLine
@@ -47,6 +50,7 @@ static NSMutableArray* logs;
             logs = [[NSMutableArray alloc] init];
         }
         [logs addObject: [ICELoggerLogEntry logEntryWithLevel:level tag:aTag line:aLine]];
+        NSLog(@"%@:\t%@",aTag, aLine);
     }
     
 }

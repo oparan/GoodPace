@@ -246,7 +246,7 @@ static const int eTwitterIndex = 2;
 }
 
 - (void) update:(NSInteger) steps {
-    stepsLabel.text = [NSString stringWithFormat:@"%d /", [myCharity.steps intValue] + (int) steps];
+    stepsLabel.text = [NSString stringWithFormat:@"%d +%d/", [myCharity.steps intValue] , (int) steps];
     [stepsLabel setNeedsDisplay];
 //    stepsLabel.text = [NSString stringWithFormat:@"%d",  steps];
     [myCharity addSteps:(int) steps];
