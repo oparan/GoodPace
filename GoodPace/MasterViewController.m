@@ -23,10 +23,14 @@ static const int TOP_IMG_HEIGHT = 329;
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    UNUSED(tableView);
+    
     return NUM_SECTIONS;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    UNUSED(tableView);
+    UNUSED(section);
     
     int numRows = 0;
 
@@ -42,6 +46,8 @@ static const int TOP_IMG_HEIGHT = 329;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UNUSED(tableView);
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     if ( !fromWalkScreen && (indexPath.row == TOP_IMG)) {
@@ -84,6 +90,8 @@ static const int TOP_IMG_HEIGHT = 329;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UNUSED(tableView);
+    
     if (fromWalkScreen) {
         activeDonor = charities[indexPath.row];
         
@@ -94,6 +102,7 @@ static const int TOP_IMG_HEIGHT = 329;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UNUSED(tableView);
     
     if (!fromWalkScreen && (indexPath.row == TOP_IMG)) {
         return TOP_IMG_HEIGHT;
@@ -105,6 +114,9 @@ static const int TOP_IMG_HEIGHT = 329;
 #pragma mark - View
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    UNUSED(identifier);
+    UNUSED(sender);
+    
     if (fromWalkScreen) {
         return NO;
     }
@@ -114,6 +126,8 @@ static const int TOP_IMG_HEIGHT = 329;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    UNUSED(sender);
+    
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         

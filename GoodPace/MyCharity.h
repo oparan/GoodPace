@@ -11,9 +11,10 @@
 
 @interface MyCharity : NSObject <NSCoding> {
     @private
-    int addedSteps;
+    int addedStepsInt;
 }
 
+    @property NSMutableString* addedSteps;
     @property NSMutableString* steps;
     @property NSString* name;
     @property NSMutableString* momeyRaised;
@@ -24,6 +25,7 @@
 - (id) initWithName:(NSString*) name;
 - (void) addPledge:(Pledge*) pledge;
 - (void) addSteps:(int) newSteps;
+- (void) walkingStarts;
 - (int) goalOfSteps;
 - (NSArray*) getPledges;
 @end

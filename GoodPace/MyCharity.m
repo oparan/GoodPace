@@ -19,6 +19,7 @@
         self.name = name;
         
         self.steps = [[NSMutableString alloc] init];
+        self.addedSteps = [[NSMutableString alloc] init];
         self.momeyRaised = [[NSMutableString alloc] init];
         
         self.pledges = [[NSMutableArray alloc] initWithCapacity:10];
@@ -30,17 +31,17 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     
-    if (addedSteps != 0) {
-        [self.steps setString:[NSString stringWithFormat:@"%d", [self.steps intValue] + addedSteps]];
-        addedSteps = 0;
-        
+    if (addedStepsInt != 0) {
         long stepsPerDollar = [self.stepsPerDollar intValue];
         
-        int moneyRaised = (int) [self.steps intValue] / stepsPerDollar;
+        int moneyRaised = (int) ([self.steps intValue] + addedStepsInt) / stepsPerDollar;
+        
+        [self.addedSteps setString:[NSString stringWithFormat:@"%d", addedStepsInt]];
         
         [self.momeyRaised setString:[NSString stringWithFormat:@"%d", moneyRaised]];
     }
 
+    [coder encodeObject:self.addedSteps forKey:@"addedSteps"];
     [coder encodeObject:self.steps forKey:@"steps"];
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.momeyRaised forKey:@"momeyRaised"];
@@ -57,6 +58,9 @@
         self.name = [coder decodeObjectForKey:@"name"];
         self.stepsPerDollar = [coder decodeObjectForKey:@"stepsPerDollar"];
         
+        self.addedSteps = [[NSMutableString alloc] initWithString:[coder decodeObjectForKey:@"addedSteps"]];
+        addedStepsInt = [self.addedSteps intValue];
+        
         self.steps = [[NSMutableString alloc] initWithString:[coder decodeObjectForKey:@"steps"]];
         self.momeyRaised = [[NSMutableString alloc] initWithString:[coder decodeObjectForKey:@"momeyRaised"]];
         
@@ -66,9 +70,21 @@
             self.pledges = [[NSMutableArray alloc] initWithCapacity:10];
             [self addDefPledges];
         }
+        
+        // Reset left overs from the past walk
+        [self walkingStarts];
     }
     
     return self;
+}
+
+- (void) walkingStarts {
+
+    if (addedStepsInt != 0) {
+        [self.steps setString:[NSString stringWithFormat:@"%d", [self.steps intValue] + addedStepsInt]];
+        [self.addedSteps setString:@""];
+        addedStepsInt = 0;
+    }
 }
 
 - (void) addDefPledges {
@@ -109,7 +125,7 @@
 }
 
 - (void) addSteps:(int) newSteps {
-    addedSteps = newSteps;
+    addedStepsInt = newSteps;
 }
 
 - (int) goalOfSteps {

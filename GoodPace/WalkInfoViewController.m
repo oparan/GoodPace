@@ -66,6 +66,9 @@ static const int eTwitterIndex = 2;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    UNUSED(animated);
+    
     myCharity = [profile myCharityByName:activeDonor.name];
     [self.tableView reloadData];
 }
@@ -78,24 +81,31 @@ static const int eTwitterIndex = 2;
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     
+    UNUSED(identifier);
+    
     UITableViewCell* clickedCell = (UITableViewCell*) sender;
     
     return clickedCell.accessoryType != UITableViewCellAccessoryNone;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    UNUSED(sender);
+    
     DetailViewController* detailViewController = (DetailViewController*) [segue destinationViewController];
     [detailViewController setData:YES walkInfoView:self];
 }
 
 #pragma mark - Table view
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    UNUSED(tableView);
+    
     return NUM_SECTIONS;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    UNUSED(tableView);
+    UNUSED(section);
     
     int numRows = NUM_FIXED_ROWS;
     
@@ -110,6 +120,7 @@ static const int eTwitterIndex = 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UNUSED(tableView);
     
     switch(indexPath.row) {
         case TOP_IMG_POS:
@@ -166,14 +177,10 @@ static const int eTwitterIndex = 2;
         imv.tag = TOP_IMG_LABEL_TAG;
         [cell.contentView addSubview:imv];
         
-        UILabel* welcomeToWalkLabel = [[UILabel alloc] initWithFrame:CGRectMake(100,10,150,40)];
-        welcomeToWalkLabel.text = @"Welcome to this walk";
-        welcomeToWalkLabel.font = [UIFont boldSystemFontOfSize:12];
+        UILabel* welcomeToWalkLabel = [UI createTextLabel:CGRectMake(100,10,150,40) text:@"Welcome to this walk" color:Nil font:[UIFont boldSystemFontOfSize:12]];
         [cell.contentView addSubview:welcomeToWalkLabel];
         
-        UILabel* trackQueLabel = [[UILabel alloc] initWithFrame:CGRectMake(70,30,210,40)];
-        trackQueLabel.text = @"How would you like to track steps?";
-        trackQueLabel.font = [UIFont systemFontOfSize:12];
+        UILabel* trackQueLabel = [UI createTextLabel:CGRectMake(70,30,210,40) text:@"How would you like to track steps?" color:Nil font:[UIFont systemFontOfSize:12]];
         [cell.contentView addSubview:trackQueLabel];
         
         UIButton* useMyIphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -206,24 +213,14 @@ static const int eTwitterIndex = 2;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.contentView addSubview:imv];
         
-        stepsLabel = [[UILabel alloc] initWithFrame:CGRectMake(120,50,210,40)];
-        stepsLabel.text = [NSString stringWithFormat:@"%@/", myCharity.steps];
-        stepsLabel.textColor = [UIColor greenColor];
-        stepsLabel.font = [UIFont boldSystemFontOfSize:26];
+        stepsLabel = [UI createTextLabel:CGRectMake(120,50,210,40) text:[NSString stringWithFormat:@"%@/", myCharity.steps] color:[UIColor greenColor] font:[UIFont boldSystemFontOfSize:26]];
         [cell.contentView addSubview:stepsLabel];
         
-        UILabel* stepsGoalLabel = [[UILabel alloc] initWithFrame:CGRectMake(120,80,210,40)];
-        stepsGoalLabel.text = [NSString stringWithFormat:@"%d", [myCharity goalOfSteps]];
-        stepsGoalLabel.textColor = [UIColor blackColor];
-        stepsGoalLabel.font = [UIFont boldSystemFontOfSize:26];
+        UILabel* stepsGoalLabel = [UI createTextLabel:CGRectMake(120,80,210,40) text:[NSString stringWithFormat:@"%d", [myCharity goalOfSteps]] color:[UIColor blackColor] font:[UIFont boldSystemFontOfSize:26]];
         [cell.contentView addSubview:stepsGoalLabel];
         
-        UILabel* textLabel = [[UILabel alloc] initWithFrame:CGRectMake(140,100,210,40)];
-        textLabel.text = @"steps";
-        textLabel.textColor = [UIColor grayColor];
-        textLabel.font = [UIFont systemFontOfSize:11];
+        UILabel* textLabel = [UI createTextLabel:CGRectMake(140,100,210,40) text:@"steps" color:[UIColor grayColor] font:[UIFont systemFontOfSize:11]];
         [cell.contentView addSubview:textLabel];
-
     }
     
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -231,14 +228,20 @@ static const int eTwitterIndex = 2;
 }
 
 - (IBAction) useFitBit:(id)sender {
+    UNUSED(sender);
+    
     messaureBy = eFitBit;
+    [myCharity walkingStarts];
     [stepsManager setHandler:self messaureBy:eFitBit];
     [self.tableView reloadData];
     [stepsManager start];
 }
 
 - (IBAction) usePhone:(id)sender {
+    UNUSED(sender);
+    
     messaureBy = eDevice;
+    [myCharity walkingStarts];
     [stepsManager setHandler:self messaureBy:eDevice];
     
     [self.tableView reloadData];
@@ -248,7 +251,7 @@ static const int eTwitterIndex = 2;
 - (void) update:(NSInteger) steps {
     stepsLabel.text = [NSString stringWithFormat:@"%d /", [myCharity.steps intValue] + (int) steps];
     [stepsLabel setNeedsDisplay];
-//    stepsLabel.text = [NSString stringWithFormat:@"%d",  steps];
+    [self.tableView reloadData];
     [myCharity addSteps:(int) steps];
 }
 
@@ -269,7 +272,6 @@ static const int eTwitterIndex = 2;
          cell.selectionStyle = UITableViewCellSelectionStyleNone;
      }
     
-    
     cell.imageView.image = activeDonor.icon;
 }
 
@@ -284,10 +286,8 @@ static const int eTwitterIndex = 2;
         
         cell.detailTextLabel.text = @"Total steps\t\t\t\t\t Total Raised";
         
-        UILabel* moneyLabel = [[UILabel alloc] initWithFrame:CGRectMake(220,8,150,40)];
-        moneyLabel.text = [NSString stringWithFormat:@"$%@", myCharity.momeyRaised];
+        UILabel* moneyLabel = [UI createTextLabel:CGRectMake(220,8,150,40) text:[NSString stringWithFormat:@"$%@", myCharity.momeyRaised] color:nil font:[UIFont boldSystemFontOfSize:40]];
         moneyLabel.tag = MONEY_LABEL_TAG;
-        moneyLabel.font = [UIFont boldSystemFontOfSize:40];
         
         // Remove old tag, for cases which choose a different donor for this walk from this screen
         UIView *removeView  = [cell viewWithTag:MONEY_LABEL_TAG];
@@ -320,6 +320,7 @@ static const int eTwitterIndex = 2;
 }
 
 - (IBAction) addPledge:(id)sender {
+    UNUSED(sender);
     
     UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
@@ -332,6 +333,7 @@ static const int eTwitterIndex = 2;
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    UNUSED(actionSheet);
     
     switch (buttonIndex) {
         case eMailIndex:

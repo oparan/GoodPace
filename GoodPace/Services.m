@@ -7,8 +7,11 @@
 //
 
 #import "Services.h"
+
 #import "Globals.h"
 #import "ServerObj.h"
+#import "StepsManager.h"
+#import "BackgroundMode.h"
 
 @implementation Services
 
@@ -32,7 +35,8 @@
 - (void) stop {
     
     [serverObj stop];
-    
+    [stepsManager stop];
+    [backgroundMode stop];
 }
 
 - (void) suspend {
@@ -51,6 +55,14 @@
     
     if (serverObj == nil) {
         serverObj = [[ServerObj alloc] init];
+    }
+    
+    if (stepsManager == nil) {
+        stepsManager = [[StepsManager alloc] init];
+    }
+    
+    if (backgroundMode == nil) {
+        backgroundMode = [[BackgroundMode alloc] init];
     }
 }
 

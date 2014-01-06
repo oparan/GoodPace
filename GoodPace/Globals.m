@@ -15,16 +15,12 @@
 
 Services*   services    = nil;
 ServerObj*  serverObj   = nil;
-Profile*    profile     = nil;
-Profile*    activeDonor     = nil;
+BackgroundMode* backgroundMode = nil;
 StepsManager* stepsManager = nil;
+
+Profile*    profile     = nil;
+Charity*    activeDonor     = nil;
 LogObj* logObj = nil;
 LogViewController* logView = nil;
 
-NSString* getDocPath(NSString* fileName) {
-    NSArray*    paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString*   documentsDirectoryPath = [paths objectAtIndex:0];
-    NSString*   filePath = [documentsDirectoryPath stringByAppendingPathComponent:fileName];
-    
-    return filePath;
-}
+

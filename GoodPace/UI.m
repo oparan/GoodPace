@@ -25,5 +25,20 @@
 
 }
 
++ (UILabel*) createTextLabel:(CGRect) frame text:(NSString*) text color:(UIColor *) color font:(UIFont*) font {
+
+    UILabel* textLabel = [[UILabel alloc] initWithFrame:frame];
+    textLabel.text = NSLocalizedString(text, nil);
+    
+    if (color) {
+        textLabel.textColor = color;
+    }
+    
+    if (font) {
+        textLabel.font = font;
+    }
+    
+    return textLabel;
+}
 
 @end

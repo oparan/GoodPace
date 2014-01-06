@@ -10,5 +10,6 @@
 
 + (void) addRightButton:(UIViewController*) viewCtrl title:(NSString*) title action:(SEL) action;
 + (void) showOKMsg:(NSString*) msg title:(NSString*) title;
++ (UILabel*) createTextLabel:(CGRect) frame text:(NSString*) text color:(UIColor *) color font:(UIFont*) font;
 
 @end

@@ -48,12 +48,8 @@
     self.chooseDifferentButton.hidden = !self.fromWalkScreen;
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    
-    return YES;
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    UNUSED(sender);
     
     if (!self.fromWalkScreen) {
     }
@@ -68,6 +64,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     [self configureView];
 }
 

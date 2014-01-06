@@ -10,6 +10,7 @@
 #import "Globals.h"
 #import "Charity.h"
 #import "MyCharity.h"
+#import "Util.h"
 
 NSString* profileFile = @"user_profile";
 
@@ -35,7 +36,7 @@ NSString* profileFile = @"user_profile";
 + (id) loadFromArchive {
     
     Profile* retProfile = nil;
-    NSString* filePath = getDocPath(profileFile);
+    NSString* filePath = [Util getDocPath:profileFile];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         NSData *data = [NSData dataWithContentsOfFile:filePath];
@@ -52,7 +53,7 @@ NSString* profileFile = @"user_profile";
 
 - (void) save {
     @synchronized(self) {
-        NSString* filePath = getDocPath(profileFile);
+        NSString* filePath = [Util getDocPath:profileFile];
         [NSKeyedArchiver archiveRootObject:self toFile:filePath];
     }
 }

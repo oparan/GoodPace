@@ -36,6 +36,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    UNUSED(animated);
+    
     [self configureView];
 }
 
@@ -46,18 +48,19 @@
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    UNUSED(sender);
+    UNUSED(identifier);
     
     // Just in case 
     return userDidLogin;
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 }
 
 #pragma mark - FB
 
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView
                             user:(id<FBGraphUser>)user {
+    
+    UNUSED(loginView);
     
     profile.fbUser = user;
     
@@ -71,7 +74,10 @@
         [self setCustomProfileImg];
     }
     
-    [[FBRequest requestForMe] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
+    [[FBRequest requestForMe] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *graphUser, NSError *error) {
+        UNUSED(connection);
+        UNUSED(graphUser);
+        
         if (!error) {
             self.fbUserEMail.text = [user objectForKey:@"email"];
         }
@@ -81,6 +87,8 @@
 }
 
 - (void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView {
+    UNUSED(loginView);
+    
     self.fbUserName.text        = @"";
     self.fbUserEMail.text       = @"";
     self.fbPicView.profileID    = 0;
@@ -94,6 +102,8 @@
 }
 
 - (void)loginView:(FBLoginView *)loginView handleError:(NSError *)error {
+    UNUSED(loginView);
+    
     NSString *alertMessage, *alertTitle;
     
     // If the user should perform an action outside of you app to recover,
@@ -134,11 +144,15 @@
 #pragma mark - Delegates
 
 - (IBAction) donePressed:(id)sender {
+    UNUSED(sender);
+    
     self.doneButton.title = @"";
     [self.fbUserComment resignFirstResponder];
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+    UNUSED(textView);
+    
     self.doneButton.title = NSLocalizedString(@"done", nil);
     return YES;
 }
@@ -149,6 +163,7 @@
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    UNUSED(actionSheet);
     
     switch (buttonIndex) {
         case 0:
@@ -170,8 +185,8 @@
     [self presentViewController:mediaPicker animated:YES completion:nil];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UNUSED(picker);
     
     [self dismissViewControllerAnimated:NO completion:nil];
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
@@ -194,6 +209,7 @@
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UNUSED(event);
     
     UITouch *touch = [touches anyObject];
     UIView* view = [touch view];

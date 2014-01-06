@@ -14,6 +14,8 @@
 		33454C9E1875674B0043FA85 /* ICEMotionRecords.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454C971875674B0043FA85 /* ICEMotionRecords.m */; };
 		33FEDE3B1875B3260001DB6E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33FEDE3A1875B3260001DB6E /* QuartzCore.framework */; };
 		7D08CD0518796B6A0005E18B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D08CD0418796B6A0005E18B /* FacebookSDK.framework */; };
+		7D08CD08187993B10005E18B /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D08CD07187993B10005E18B /* Util.m */; };
+		7D08CD0B1879B3DF0005E18B /* BackgroundMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D08CD0A1879B3DF0005E18B /* BackgroundMode.m */; };
 		7D15528D186AE26E0003EB2C /* walkInfoFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D15528C186AE26E0003EB2C /* walkInfoFrame.png */; };
 		7D155290186AE3970003EB2C /* WalkInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D15528F186AE3970003EB2C /* WalkInfoViewController.m */; };
 		7D155293186AE4E50003EB2C /* Pledge.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D155292186AE4E50003EB2C /* Pledge.m */; };
@@ -54,6 +56,7 @@
 		7D9E86B51861E6990039A747 /* redCross.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E86B11861E6990039A747 /* redCross.png */; };
 		7D9E86B61861E6990039A747 /* Spca.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E86B21861E6990039A747 /* Spca.png */; };
 		7D9E86B91861F1E30039A747 /* startImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E86B81861F1E30039A747 /* startImage.png */; };
+		7DAC968B1879C918006E4817 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAC968A1879C918006E4817 /* CoreLocation.framework */; };
 		7DC528D318706A1900A04592 /* useFitBit.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC528D118706A1900A04592 /* useFitBit.png */; };
 		7DC528D418706A1900A04592 /* usePhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC528D218706A1900A04592 /* usePhone.png */; };
 		7DC528D618706E8000A04592 /* walkingProgress.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC528D518706E8000A04592 /* walkingProgress.png */; };
@@ -89,6 +92,10 @@
 		33454C971875674B0043FA85 /* ICEMotionRecords.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICEMotionRecords.m; sourceTree = "<group>"; };
 		33FEDE3A1875B3260001DB6E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7D08CD0418796B6A0005E18B /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		7D08CD06187993B10005E18B /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		7D08CD07187993B10005E18B /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		7D08CD091879B3DF0005E18B /* BackgroundMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundMode.h; sourceTree = "<group>"; };
+		7D08CD0A1879B3DF0005E18B /* BackgroundMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundMode.m; sourceTree = "<group>"; };
 		7D15528C186AE26E0003EB2C /* walkInfoFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkInfoFrame.png; sourceTree = "<group>"; };
 		7D15528E186AE3970003EB2C /* WalkInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WalkInfoViewController.h; sourceTree = "<group>"; };
 		7D15528F186AE3970003EB2C /* WalkInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WalkInfoViewController.m; sourceTree = "<group>"; };
@@ -148,6 +155,7 @@
 		7D9E86B11861E6990039A747 /* redCross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redCross.png; sourceTree = "<group>"; };
 		7D9E86B21861E6990039A747 /* Spca.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spca.png; sourceTree = "<group>"; };
 		7D9E86B81861F1E30039A747 /* startImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startImage.png; sourceTree = "<group>"; };
+		7DAC968A1879C918006E4817 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7DC528D118706A1900A04592 /* useFitBit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = useFitBit.png; sourceTree = "<group>"; };
 		7DC528D218706A1900A04592 /* usePhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usePhone.png; sourceTree = "<group>"; };
 		7DC528D518706E8000A04592 /* walkingProgress.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkingProgress.png; sourceTree = "<group>"; };
@@ -168,6 +176,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DAC968B1879C918006E4817 /* CoreLocation.framework in Frameworks */,
 				33FEDE3B1875B3260001DB6E /* QuartzCore.framework in Frameworks */,
 				7DC528E01870877800A04592 /* CoreMotion.framework in Frameworks */,
 				7D89831A186094E400CB7D55 /* CoreGraphics.framework in Frameworks */,
@@ -229,6 +238,7 @@
 		7D597E261869A4EE003DBC04 /* imports */ = {
 			isa = PBXGroup;
 			children = (
+				7D08CD06187993B10005E18B /* Util.h */,
 				7D4BEF9E1873088100EBCEC2 /* Facebook.h */,
 				7D8983621860B6BB00CB7D55 /* ServerObj.h */,
 				7D9E869818619EBF0039A747 /* Globals.h */,
@@ -236,6 +246,7 @@
 				7D9E869E1861A61C0039A747 /* Service.h */,
 				7DC528D718707DF200A04592 /* StepsManager.h */,
 				7DC528DA187084C800A04592 /* IPhone5SStepsCounter.h */,
+				7D08CD091879B3DF0005E18B /* BackgroundMode.h */,
 				7D4BEF9B1871878F00EBCEC2 /* LogObj.h */,
 				7D597E271869A7F2003DBC04 /* UI.h */,
 			);
@@ -277,6 +288,7 @@
 		7D898316186094E400CB7D55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7DAC968A1879C918006E4817 /* CoreLocation.framework */,
 				7D08CD0418796B6A0005E18B /* FacebookSDK.framework */,
 				33FEDE3A1875B3260001DB6E /* QuartzCore.framework */,
 				7DC528DF1870877800A04592 /* CoreMotion.framework */,
@@ -342,6 +354,8 @@
 				7D597E281869A7F2003DBC04 /* UI.m */,
 				7D4BEF9C1871878F00EBCEC2 /* LogObj.m */,
 				7D4BEF9F1873088100EBCEC2 /* Facebook.m */,
+				7D08CD07187993B10005E18B /* Util.m */,
+				7D08CD0A1879B3DF0005E18B /* BackgroundMode.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -545,11 +559,13 @@
 				7D4BEF9A1871870D00EBCEC2 /* LogViewController.m in Sources */,
 				7D9E869A18619F060039A747 /* Globals.m in Sources */,
 				7D898328186094E400CB7D55 /* AppDelegate.m in Sources */,
+				7D08CD08187993B10005E18B /* Util.m in Sources */,
 				33454C9C1875674B0043FA85 /* ICEMotionData.m in Sources */,
 				7D4BEFA01873088100EBCEC2 /* Facebook.m in Sources */,
 				33454C9A1875674B0043FA85 /* AccelerometerFilter.m in Sources */,
 				33454C9D1875674B0043FA85 /* ICEMotionMonitor.m in Sources */,
 				7DC528D918707DF200A04592 /* StepsManager.m in Sources */,
+				7D08CD0B1879B3DF0005E18B /* BackgroundMode.m in Sources */,
 				7D89832E186094E400CB7D55 /* MasterViewController.m in Sources */,
 				7D8983601860B2ED00CB7D55 /* Charity.m in Sources */,
 				7D898324186094E400CB7D55 /* main.m in Sources */,
@@ -694,6 +710,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -702,6 +719,12 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GoodPace/GoodPace-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -710,7 +733,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "A94C4054-FBBE-4ECE-B676-416F77A99057";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
@@ -722,6 +745,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -730,6 +754,12 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GoodPace/GoodPace-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -738,7 +768,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "A94C4054-FBBE-4ECE-B676-416F77A99057";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;

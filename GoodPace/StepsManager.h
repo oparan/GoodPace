@@ -28,9 +28,16 @@ enum EMessaureBy { eNone, eDevice, eFitBit };
     
     @private
     IPhone5SStepsCounter* iPhone5SStepsCounter;
+    
+    @private
+    BOOL hardwareCounting;
+    
+    @private
+    int totalCount;
 }
 
 - (void) setHandler:(id<StepsHandler>) stepsHandler messaureBy:(enum EMessaureBy) messaureBy;
 - (void) update:(NSInteger) numSteps;
+- (void) wakeUp;
 
 @end

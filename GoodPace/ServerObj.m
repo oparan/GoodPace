@@ -9,7 +9,6 @@
 #import "ServerObj.h"
 #import "Profile.h"
 #import "Globals.h"
-#import "StepsManager.h"
 
 static NSString* profileFile = @"user_profile";
 static const int SAVE_TIMER_INT = 1;
@@ -66,6 +65,9 @@ static const int SAVE_TIMER_INT = 1;
 }
 
 - (void)timerFireMethod:(NSTimer *)timer {
+    
+    (void)(timer);
+    
     [profile save];
 }
 

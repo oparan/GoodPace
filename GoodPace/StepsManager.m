@@ -7,12 +7,25 @@
 //
 
 #import "StepsManager.h"
+
 #import "IPhone5SStepsCounter.h"
 #import "Globals.h"
 #import "LogObj.h"
 #import "ICEMotionMonitor.h"
+#import "BackgroundMode.h"
 
 @implementation StepsManager
+
+- (id) init {
+    
+    self = [super init];
+    
+    if (self) {
+        hardwareCounting = !CMStepCounter.isStepCountingAvailable;
+    }
+    
+    return self;
+}
 
 - (void) setHandler:(id<StepsHandler>) _stepsHandler messaureBy:(enum EMessaureBy) _messaureBy {
     stepsHandler = _stepsHandler;
@@ -21,16 +34,18 @@
 
 - (void) start {
     if (messaureBy == eDevice) {
-/*        [NSTimer scheduledTimerWithTimeInterval:1
-                                                     target:self
-                                                   selector:@selector(timerFireMethod:)
-                                                   userInfo:nil
-                                                    repeats:YES];*/
+        
+        if (!hardwareCounting) {
+            [backgroundMode start];
+        }
         
         ICEMotionMonitor* monitor = [ICEMotionMonitor sharedMonitor];
         [monitor startStepsCountingWithHandler:^(NSInteger numberOfCountedSteps) {
-            if(stepsHandler!=nil){
-                [stepsHandler update:numberOfCountedSteps];
+            if(numberOfCountedSteps && (stepsHandler!=nil)){
+                if (totalCount != numberOfCountedSteps) {
+                    totalCount = (int) numberOfCountedSteps;
+                    [stepsHandler update:numberOfCountedSteps];
+                }
             }
         } updateEvery:1];
 
@@ -39,20 +54,19 @@
     }
 }
 
-/*- (void)timerFireMethod:(NSTimer *)timer {
-    [stepsHandler update:100];
-}*/
-
-
 - (void) stop {
     if (messaureBy == eDevice) {
-        
     }
     else if (messaureBy == eFitBit) {
     }
 }
 
 - (void) resume {
+
+    if (!hardwareCounting) {
+        [backgroundMode suspend];
+    }
+    
     if (messaureBy == eDevice) {
         
     }
@@ -61,11 +75,19 @@
 }
 
 - (void) suspend {
+    if (!hardwareCounting) {
+        [backgroundMode resume];
+    }
+    
     if (messaureBy == eDevice) {
         
     }
     else if (messaureBy == eFitBit) {
     }
+}
+
+- (void) wakeUp {
+    [logObj addLog:@"Woken Up"];
 }
 
 - (void) update:(NSInteger) numSteps {

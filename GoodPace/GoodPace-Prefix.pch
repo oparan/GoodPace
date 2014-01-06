@@ -14,3 +14,4 @@
 #endif
 
 #import "UI.h"
+#import "Globals.h"

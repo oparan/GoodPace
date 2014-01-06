@@ -16,15 +16,18 @@
 @class StepsManager;
 @class LogObj;
 @class LogViewController;
+@class BackgroundMode;
 
-extern ServerObj* serverObj;
 extern Services* services;
+extern ServerObj* serverObj;
+extern BackgroundMode* backgroundMode;
+extern StepsManager* stepsManager;
+
 extern Profile* profile;
 extern Charity* activeDonor;
-extern StepsManager* stepsManager;
 extern LogObj* logObj;
 extern LogViewController* logView;
 
-extern NSString* getDocPath(NSString* fileName);
+#define UNUSED(x) (void)(x)
 
 #endif
