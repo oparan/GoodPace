@@ -34,8 +34,6 @@
     [self.view addSubview:self.logView];
 }
 
-
-
 - (void) viewWillAppear:(BOOL)animated  {
     logView = self;
     [super viewWillAppear:animated];
