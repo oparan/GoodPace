@@ -7,18 +7,8 @@
 //
 
 #import "ICELogger.h"
-typedef NS_ENUM(NSInteger, ICELogLevel){ICELoggerLevelVerbose=0L, ICELoggerLevelInfo, ICELoggerLevelDebug, ICELoggerLevelWarning, ICELoggerLevelError};
 
 
-@interface ICELoggerLogEntry : NSObject
-
-+(id)logEntryWithLevel:(ICELogLevel)level tag:(NSString*) aTag line:(NSString*) aLine;
-@property (strong, readonly, nonatomic) NSString* tag;
-@property (strong, readonly, nonatomic) NSString* line;
-@property (readonly, nonatomic)         ICELogLevel level;
-@property (readonly, nonatomic)         NSDate* time;
-
-@end
 
 @implementation ICELoggerLogEntry
 
@@ -42,8 +32,9 @@ static NSMutableArray* logs;
 
 @implementation ICELogger
 
-+(void)log: (ICELogLevel) level tag:(NSString*) aTag line:(NSString*) aLine
++(void)log: (ICELogLevel) level tag:(const NSString*) aTag line:(NSString*) aLine
 {
+#ifdef DEBUG
     @synchronized (self)
     {
         if(logs==nil){
@@ -52,28 +43,48 @@ static NSMutableArray* logs;
         [logs addObject: [ICELoggerLogEntry logEntryWithLevel:level tag:aTag line:aLine]];
         NSLog(@"%@:\t%@",aTag, aLine);
     }
-    
+#endif
 }
 
-+(void)verbose:(NSString *)tag  line:(NSString *)log
++(void)verbose:(const NSString *)tag  line:(NSString *)log
 {
     [ICELogger log:ICELoggerLevelVerbose tag:tag line:log];
 }
-+(void)info:(NSString *)tag  line:(NSString *)log
++(void)info:(const NSString *)tag  line:(NSString *)log
 {
     [ICELogger log:ICELoggerLevelInfo tag:tag line:log];
 }
-+(void)debug:(NSString *)tag  line:(NSString *)log
++(void)debug:(const NSString *)tag  line:(NSString *)log
 {
     [ICELogger log:ICELoggerLevelDebug tag:tag line:log];
 }
-+(void)warning:(NSString *)tag  line:(NSString *)log
++(void)warning:(const NSString *)tag  line:(NSString *)log
 {
     [ICELogger log:ICELoggerLevelWarning tag:tag line:log];
 }
-+(void)error:(NSString *)tag  line:(NSString *)log
++(void)error:(const NSString *)tag  line:(NSString *)log
 {
     [ICELogger log:ICELoggerLevelError tag:tag line:log];
+}
+
++(NSInteger) numberOfEntries
+{
+    @synchronized (self)
+    {
+        return logs!=nil ? logs.count:0;
+    }
+}
+
+
++(ICELoggerLogEntry*) entryAtIndex:(NSInteger)index;
+{
+    @synchronized (self)
+    {
+        if(logs!=nil && index>=0 && index<logs.count){
+            return [logs objectAtIndex:index];
+        }
+        return nil;
+    }
 }
 
 @end

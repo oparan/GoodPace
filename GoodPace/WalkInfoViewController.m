@@ -14,7 +14,7 @@
 #import "Pledge.h"
 #import "Charity.h"
 #import "MyCharity.h"
-#import "LogViewController.h"
+#import "ICELogViewController.h"
 #import "LogObj.h"
 #import "Facebook.h"
 #import "ICEMotionMonitor.h"
@@ -353,7 +353,7 @@ static const int eTwitterIndex = 2;
 
     ICEMotionMonitor* monitor = [ICEMotionMonitor sharedMonitor];
     [monitor stopStepsCounting];
-    LogViewController*  logViewController = [[LogViewController alloc] init];
+    ICELogViewController*  logViewController = [[ICELogViewController alloc] init];
     logViewController.view.backgroundColor = [UIColor whiteColor];
     [self.navigationController pushViewController:logViewController animated:YES];
 }

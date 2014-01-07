@@ -14,8 +14,7 @@
 @interface ICEMotionSegmentRecords : NSObject
 
 @property (strong, nonatomic) NSMutableArray *motionValues;
-@property (strong, nonatomic) NSArray *highs; // collection of the high peaks
-@property (strong, nonatomic) NSArray *lows;  // collection of the low points
+@property (strong, nonatomic) NSArray *highPeaks, *lowPeaks, *analyzedStepsPeaks;
 @property (nonatomic) double startTime;
 @property (nonatomic) double endTime;
 

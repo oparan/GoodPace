@@ -10,20 +10,23 @@
 #import "ICEMotionData.h"
 #import "ICEMotionMonitor.h"
 #import "CPTFill.h"
+#import "ICELogger.h"
+static const NSString* TAG=@"MotionGraph";
 
 @interface ICEMotionGraphViewController ()
 {
     NSInteger currentSegment;
+    NSMutableArray *highLows;
     ICEMotionRecords *accelerationRecords;
     CPTScatterPlot *accelarationPlot;
     CPTScatterPlot *accelarationPlotX;
     CPTScatterPlot *accelarationPlotY;
     CPTScatterPlot *accelarationPlotZ;
     CPTScatterPlot *accelarationHighLowPlot;
+    CPTScatterPlot *stepsPeaksPlot;
     
     ICEMotionRecords *gyroRecords;
     
-    NSMutableArray *highLows;
     CPTScatterPlot *gyroPlot;
     
     CPTXYGraph *graph;
@@ -42,13 +45,14 @@
     if(sender==rightSwipeRecognizer && currentSegment>0){
         currentSegment--;
         [self calculatePlotRangeForSegment];
-        [self composeHighLowsDataSourceForSegment:accelerationRecords.motionSegments[currentSegment]];
+        [self composeHighLowsDataSourceForSegment];
         [graph reloadData];
     }
     else if(sender==leftSwipeRecognizer && currentSegment<accelerationRecords.motionSegments.count-1){
         currentSegment++;
         [self calculatePlotRangeForSegment];
-        [self composeHighLowsDataSourceForSegment:accelerationRecords.motionSegments[currentSegment]];
+        [self composeHighLowsDataSourceForSegment];
+        
         [graph reloadData];
     }
 }
@@ -81,12 +85,13 @@
     [plotSpace setYRange:rangeY];
 }
 
--(void) composeHighLowsDataSourceForSegment:(ICEMotionSegmentRecords*) segment{
+-(void) composeHighLowsDataSourceForSegment
+{
     highLows = [[NSMutableArray alloc] init];
-    
+    ICEMotionSegmentRecords* segment = accelerationRecords.motionSegments[currentSegment];
     ICEMotionData *item, *jtem;
-    NSArray* currentLows = segment.lows;
-    NSArray* currentHighs = segment.highs;
+    NSArray* currentLows = segment.lowPeaks;
+    NSArray* currentHighs = segment.highPeaks;
     @try {
         for(int i=0, j=0; i<currentLows.count && j<currentHighs.count; ){
             item = currentLows[i];
@@ -103,17 +108,22 @@
 
     }
     @catch (NSException *exception) {
-        NSLog(@"Error creating the high-low series");
+        [ICELogger debug:TAG line:@"Error creating the high-low series"];
     }
-    
+    [ICELogger debug:TAG line:[NSString stringWithFormat:@"composed %lu high-low series", (unsigned long)highLows.count]];
     
 }
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plotnumberOfRecords {
+    ICEMotionSegmentRecords* motionData = (plotnumberOfRecords==gyroPlot ? gyroRecords.motionSegments[currentSegment]:accelerationRecords.motionSegments[currentSegment]);
+    
     if(plotnumberOfRecords==accelarationHighLowPlot){
         return highLows.count;
     }
-    ICEMotionSegmentRecords* motionData = (plotnumberOfRecords==gyroPlot ? gyroRecords.motionSegments[currentSegment]:accelerationRecords.motionSegments[currentSegment]);
+    else if(plotnumberOfRecords==stepsPeaksPlot){
+        return motionData.analyzedStepsPeaks.count;
+    }
+    
     return motionData.motionValues.count;
 }
 
@@ -123,6 +133,10 @@
 {
     BOOL isGyro = plot==gyroPlot;
     BOOL isHighLow = plot==accelarationHighLowPlot;
+    BOOL isSteps = plot==stepsPeaksPlot;
+    
+    ICEMotionSegmentRecords* motionData = ( isGyro ? gyroRecords.motionSegments[currentSegment]:accelerationRecords.motionSegments[currentSegment]);
+    
     if(isHighLow){
         ICEMotionData* item = highLows[index];
         if(fieldEnum == CPTScatterPlotFieldX)
@@ -132,8 +146,17 @@
             return [NSNumber numberWithDouble:item.vector.size];
         }
     }
+    else if(isSteps){
+        ICEMotionData* item = motionData.analyzedStepsPeaks[index];
+        if(fieldEnum == CPTScatterPlotFieldX)
+        {
+            return [NSNumber numberWithDouble:item.timeStamp];
+        } else {
+            return [NSNumber numberWithDouble:item.vector.size];
+        }
+    }
     
-    ICEMotionSegmentRecords* motionData = ( isGyro ? gyroRecords.motionSegments[currentSegment]:accelerationRecords.motionSegments[currentSegment]);
+    
     // We need to provide an X or Y (this method will be called for each) value for every index
     if(index>=motionData.motionValues.count){
         return [NSNumber numberWithDouble:0.0];
@@ -203,6 +226,8 @@
     hostView.hostedGraph = graph;
     
     [self calculatePlotRangeForSegment];
+    [self composeHighLowsDataSourceForSegment];
+    
     
     gyroPlot = [[CPTScatterPlot alloc] initWithFrame:CGRectZero];
     
@@ -219,7 +244,7 @@
     accelarationHighLowPlot.dataSource = self;
 
     lineStyle = [CPTMutableLineStyle lineStyle];
-    lineStyle.lineWidth = 1.5f;
+    lineStyle.lineWidth = 1.0f;
     lineStyle.lineColor = [CPTColor blueColor];
     accelarationHighLowPlot.dataLineStyle = lineStyle;
     
@@ -259,16 +284,25 @@
     accelarationPlot.dataSource = self;
     
     lineStyle = [CPTMutableLineStyle lineStyle];
-    lineStyle.lineWidth = 1.0f;
+    lineStyle.lineWidth = 0.75f;
     lineStyle.lineColor = [CPTColor darkGrayColor];
     accelarationPlot.dataLineStyle = lineStyle;
     
+    stepsPeaksPlot = [[CPTScatterPlot alloc] initWithFrame:CGRectZero];
+    
+    stepsPeaksPlot.dataSource = self;
+    
+    lineStyle = [CPTMutableLineStyle lineStyle];
+    lineStyle.lineWidth = 1.0f;
+    lineStyle.lineColor = [CPTColor greenColor];
+    stepsPeaksPlot.dataLineStyle = lineStyle;
+    
     [graph addPlot:gyroPlot];
     [graph addPlot:accelarationPlot];
-
-    [self composeHighLowsDataSourceForSegment:accelerationRecords.motionSegments[currentSegment]];
-    
     [graph addPlot:accelarationHighLowPlot];
+    
+    [graph addPlot:stepsPeaksPlot];
+
     
     
 

@@ -16,8 +16,8 @@
         return nil;
     }
     self.motionValues = [[NSMutableArray alloc] init];
-    self.highs = [[NSArray alloc] init];
-    self.lows = [[NSArray alloc] init];
+    self.analyzedStepsPeaks = [[NSArray alloc] init];
+    
     self.startTime=MAXFLOAT;
     self.endTime=0.0;
     
@@ -96,7 +96,7 @@
     if([segment size]>=self.segmentSize){
         
         NSLog(@"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        NSLog(@"%@ segment full. Start: %f, end:%f",self.name, segment.startTime, segment.endTime);
+//        NSLog(@"%@ segment full. Start: %f, end:%f",self.name, segment.startTime, segment.endTime);
 
         if(segmentReadyHandler!=nil){
             segmentReadyHandler(segment);

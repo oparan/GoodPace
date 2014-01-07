@@ -15,20 +15,21 @@
 
 #import "ICEMotionMonitor.h"
 #import <CoreMotion/CMMotionManager.h>
-#import <CoreMotion/CMStepCounter.h>
 #import <CoreMotion/CMDeviceMotion.h>
 
 #import "ICELogger.h"
+#import "ICENumericRange.h"
 
 #import "AccelerometerFilter.h"
 #include <math.h>
 
 
-#define MIN_STEPS_FREQUENCY (0.2)
+#define MIN_STEPS_FREQUENCY (0.1)
 #define MAX_STEPS_FREQUENCY (1.8)
-#define MIN_STEPS_THREASHOLD (2)
-#define MAX_STEPS_THREASHOLD (12.0)
-#define TAG (@"MotionMonitor")
+#define MIN_STEPS_THREASHOLD (1.0)
+#define MAX_STEPS_THREASHOLD (40.0)
+
+static const NSString* TAG = @"MotionMonitor";
 
 typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertaintyNone = -1L, ICEMotionAnalysisCertaintyLow, ICEMotionAnalysisCertaintyMid, ICEMotionAnalysisCertaintyHigh};
 
@@ -48,13 +49,11 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
 @interface ICEStepMotionValidator : NSObject
 
     // accumulative data for analysis
-    @property double stepFrequency;     // the frequency of going from "high" to "low" aceleration norms
-    @property double stepMinFrequency;  // the min frequency of going from "high" to "low" aceleration norms
-    @property double stepMaxFrequency;  // the max frequency of going from "high" to "low" aceleration norms
-    
-    @property double stepDiffThreshold; // the threashold bewteen "high" and "low" peaks
-    @property double stepMinThreshold;  // the min threashold for "low" peaks
-    @property double stepMaxThreshold;  // the max threashold for "high" peaks
+    @property ICENumericRange* stepFrequencyRange;     // the range of frequency of going from "high" to "low" aceleration norms
+
+    @property ICENumericRange* stepDiffThresholdRange; // the threashold range of a steps' change in acceleration
+    @property ICENumericRange* stepLowThresholdRange;  // the threashold range for "low" peaks
+    @property ICENumericRange* stepHighThresholdRange; // the threashold range for "high" peaks
 
 +(id) validateAs:(ICEStepMotionValidator*)other;
 
@@ -67,40 +66,37 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
 -(id) init
 {
     self=[super init];
-    self.stepFrequency=(MIN_STEPS_FREQUENCY+MAX_STEPS_FREQUENCY)/2.0;
-    self.stepMinFrequency = MIN_STEPS_FREQUENCY;
-    self.stepMaxFrequency = MAX_STEPS_FREQUENCY;
-    
-    self.stepDiffThreshold=(MIN_STEPS_THREASHOLD+MAX_STEPS_THREASHOLD)/2.0;
-    self.stepMinThreshold = MIN_STEPS_THREASHOLD;
-    self.stepMaxThreshold = MAX_STEPS_THREASHOLD;
+    self.stepFrequencyRange=[ICENumericRange rangeFrom:MIN_STEPS_FREQUENCY to:MAX_STEPS_FREQUENCY];
+    double f= (MIN_STEPS_THREASHOLD+MAX_STEPS_THREASHOLD)/2.0;
+    self.stepDiffThresholdRange= [ICENumericRange rangeFrom:MIN_STEPS_THREASHOLD to:MAX_STEPS_THREASHOLD];
+    self.stepLowThresholdRange = [ICENumericRange rangeFrom:MIN_STEPS_THREASHOLD to:f];
+    self.stepHighThresholdRange = [ICENumericRange rangeFrom:f to:MAX_STEPS_THREASHOLD];
     return self;
 }
 
 +(id) validateAs:(ICEStepMotionValidator*)other
 {
-    ICEStepMotionValidator *result = [[ICEStepMotionValidator alloc] init];
+    ICEStepMotionValidator *result = [[[other class] alloc] init];
     if(other!=nil){
-        result.stepFrequency    = other.stepFrequency;;
-        result.stepMinFrequency = other.stepMinFrequency;
-        result.stepMaxFrequency = other.stepMaxFrequency;
+        result.stepFrequencyRange    = other.stepFrequencyRange;;
         
-        result.stepDiffThreshold= other.stepDiffThreshold;
-        result.stepMinThreshold = other.stepMinThreshold;
-        result.stepMaxThreshold = other.stepMaxThreshold;
+        result.stepDiffThresholdRange= other.stepDiffThresholdRange;
+        result.stepLowThresholdRange = other.stepLowThresholdRange;
+        result.stepHighThresholdRange = other.stepHighThresholdRange;
     }
     return result;
 }
 
 -(BOOL) isValidAccelerationOfStep: (ICEMotionData*)acceleration lastValid:(ICEMotionData*) lastStep{
     
-    BOOL isValidStep = lastStep==nil;
-    if(!isValidStep){
-        double dt = acceleration.timeStamp-lastStep.timeStamp;
-        double dv = fabsl(acceleration.vector.size-lastStep.vector.size);
-        isValidStep = (dt>self.stepMinFrequency && dt<self.stepMaxFrequency && dv>self.stepMinThreshold && dv<self.stepMaxThreshold);
-    }
-    return isValidStep;
+//    BOOL isValidStep = lastStep==nil;
+//    if(!isValidStep){
+//        double dt = acceleration.timeStamp-lastStep.timeStamp;
+//        double dv = fabsl(acceleration.vector.size-lastStep.vector.size);
+//        isValidStep = (dt>self.stepMinFrequency && dt<self.stepMaxFrequency && dv>self.stepMinThreshold && dv<self.stepMaxThreshold);
+//    }
+//    return isValidStep;
+    return NO;
 }
 
 @end
@@ -115,11 +111,16 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
 
 -(BOOL) isValidAccelerationOfStep: (ICEMotionData*)acceleration lastValid:(ICEMotionData*) lastStep{
     
-    BOOL isValidStep = lastStep==nil;
+    BOOL isValidStep = (lastStep==nil);
     if(!isValidStep){
         double dt = acceleration.timeStamp-lastStep.timeStamp;
         double dv = fabsl(acceleration.vector.size-lastStep.vector.size);
-        isValidStep = (dt>self.stepMinFrequency && dt<self.stepMaxFrequency && fabsl((dt-self.stepFrequency)/self.stepFrequency)<0.15 && dv>self.stepMinThreshold && dv<self.stepMaxThreshold && fabsl((dv-self.stepDiffThreshold)/self.stepDiffThreshold)<0.15);
+        double acceleration = lastStep.vector.size;
+        isValidStep = [self.stepFrequencyRange isInRange:dt] && [self.stepDiffThresholdRange isInRange:dv] && ([self.stepHighThresholdRange isInRange:acceleration] || [self.stepLowThresholdRange isInRange:acceleration]);
+        
+        [ICELogger debug:@"ImprovedStepMotionValidator" line:[NSString stringWithFormat:@"validating with dt=%f, dv=%f %@",dt,dv, (isValidStep?@"PASSED":@"FAILED")]];
+        
+
     }
     return isValidStep;
 }
@@ -196,13 +197,14 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
 
 @interface ICEMotionSegmentAnalyzer :NSObject
 
+@property (strong, readonly) NSString* analyzerId;
 @property (strong, readonly) ICEStepMotionValidator* stepValidator;
 
 @property (readonly) double performanceRate;
 
 -(ICEMotionSegmentAnalysisResult*) analyzeSegment:(ICEMotionSegmentRecords*) segment currentlyAccelerating:(BOOL) isAccelerating expectedStepsMin:(NSInteger) minSteps expectedMax:(NSInteger) maxSteps;
 
--(void) updateResultsToSegment: (ICEMotionSegmentRecords*) segment;
+-(void) updateResultsToSegment;
 
 -(void) addResultCertaintyToPerformanceRate: (ICEMotionAnalysisCertainty) analysisCertainty;
 
@@ -215,28 +217,33 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
 @implementation ICEMotionSegmentAnalyzer
 {
     ICEStepMotionValidator * validator;
-    NSMutableArray *lows, *highs;
-    double avgHigh;
-    double avgLow;
-    double avgStepFrequency;
-    double avgStepThreshold;
+    ICEMotionSegmentRecords* analyzedSegment;
+    NSMutableArray *lowPeaks, *highPeaks, *peaksAsStepsSequence;
+    
+    ICENumericRange *highPeaksRange;
+    ICENumericRange *lowPeaksRange;
+    ICENumericRange *stepFrequencyRange;
+    ICENumericRange *stepThresholdRange;
+    
     NSInteger numberOfAnalysis;
     NSInteger accumulatedCertainties;
     BOOL accelerating;
 }
+@synthesize analyzerId;
 
-+(id)analizerWithValidator:(ICEStepMotionValidator*) aValidator
++(id)analyzerWithId: (NSString*) anId validator:(ICEStepMotionValidator*) aValidator
 {
     ICEMotionSegmentAnalyzer* analyzer = [[ICEMotionSegmentAnalyzer alloc] init];
-    analyzer->validator = [ICEStepMotionValidator validateAs:aValidator];
+    analyzer->analyzerId = anId;
+    analyzer->validator = [[aValidator class] validateAs:aValidator];
     return analyzer;
 }
 
 -(id)init
 {
     self= [super init];
-    lows = [[NSMutableArray alloc] init];
-    highs = [[NSMutableArray alloc] init];
+    lowPeaks = [[NSMutableArray alloc] init];
+    highPeaks = [[NSMutableArray alloc] init];
     validator = [[ICEStepMotionValidator alloc] init];
     accumulatedCertainties=0;
     numberOfAnalysis=0;
@@ -251,11 +258,15 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
 -(ICEMotionSegmentAnalysisResult*) analyzeSegment:(ICEMotionSegmentRecords*) segment currentlyAccelerating:(BOOL) isAccelerating expectedStepsMin:(NSInteger) minSteps expectedMax:(NSInteger) maxSteps
 {
     accelerating = isAccelerating;
-    [self computeAccelerationHighsLowsforSegment:segment];
-    ICEMotionAnalysisCertainty certainty = (lows.count>=minSteps && lows.count<=maxSteps) ? ICEMotionAnalysisCertaintyHigh : ICEMotionAnalysisCertaintyLow;
-    certainty = (highs.count>=minSteps && highs.count<=maxSteps) ? certainty : certainty--;
+    analyzedSegment = segment;
     
-    ICEMotionSegmentAnalysisResult * result = [ICEMotionSegmentAnalysisResult resultWithSegment: segment certainty:certainty steps: MAX(highs.count,lows.count) accelerationOnEnd:accelerating];
+    [self computeAccelerationPeaksOfRecords];
+    [self composeStepsSequence];
+    
+    ICEMotionAnalysisCertainty certainty = (peaksAsStepsSequence.count>=minSteps && peaksAsStepsSequence.count<=maxSteps) ? ICEMotionAnalysisCertaintyHigh : ICEMotionAnalysisCertaintyLow;
+    certainty = (highPeaks.count>=minSteps && highPeaks.count<=maxSteps) ? certainty : certainty--;
+    
+    ICEMotionSegmentAnalysisResult * result = [ICEMotionSegmentAnalysisResult resultWithSegment: segment certainty:certainty steps: peaksAsStepsSequence.count accelerationOnEnd:accelerating];
     return result;
 }
 
@@ -271,63 +282,103 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
     return (numberOfAnalysis!=0) ? accumulatedCertainties/numberOfAnalysis : 0.0;
 }
 
--(void) computeAccelerationHighsLowsforSegment:(ICEMotionSegmentRecords*) segment
-{
-    ICEMotionData *lastAccelerationData=nil;
-    ICEMotionData* lastHigh=nil;
-    ICEMotionData* lastLow=nil;
-    
-    [lows removeAllObjects];
-    [highs removeAllObjects];
-    
-    double dataSize;
-    double lastDataSize ;
 
-    for(ICEMotionData* data in segment.motionValues){
+-(void) composeStepsSequence
+{
+    peaksAsStepsSequence = [[NSMutableArray alloc] init];
+    
+    ICEMotionData *low=[lowPeaks firstObject], *high=[highPeaks firstObject];
+    if(low==nil || high==nil){
+        return;
+    }
+//    [ICELogger debug:TAG line:[NSString stringWithFormat:@"composeStepsSequence: lows:%lu, highs:%lu", (unsigned long)lowPeaks.count, (unsigned long)highPeaks.count]];
+  
+    [peaksAsStepsSequence addObject:(low.timeStamp<high.timeStamp?low:high)];
+    
+    @try {
+        for(int iLows=0, iHighs=0; iLows<lowPeaks.count && iHighs<highPeaks.count; ){
+            low = lowPeaks[iLows];
+            high = highPeaks[iHighs];
+            /*[ICELogger verbose:TAG line:[NSString stringWithFormat:@"\tiLows: %d, iHighs:%d", iLows, iHighs]];
+            [ICELogger verbose:TAG line:[NSString stringWithFormat:@"\tLOW: t=%f, n=%f", low.timeStamp, low.vector.size]];
+            [ICELogger verbose:TAG line:[NSString stringWithFormat:@"\tHIGH: t=%f, n=%f", high.timeStamp, high.vector.size]];
+             */
+            if(low.timeStamp<high.timeStamp){
+                if([validator isValidAccelerationOfStep:high lastValid:low]){
+                    [peaksAsStepsSequence addObject:high];
+                    [ICELogger info:analyzerId line:[NSString stringWithFormat:@"Add HIGH: t=%f, n=%f", high.timeStamp, high.vector.size]];
+                }
+                iLows++;
+            }
+            else {
+                if([validator isValidAccelerationOfStep:low lastValid:high]){
+                    [peaksAsStepsSequence addObject:high];
+                    [ICELogger info:analyzerId line:[NSString stringWithFormat:@"Add LOW: t=%f, n=%f", low.timeStamp, low.vector.size]];
+                }
+                iHighs++;
+            }
+        }
+        
+    }
+    @catch (NSException *exception) {
+        [ICELogger error:TAG line:@"Error creating the step sequence series"];
+    }
+    
+    
+}
+-(void) computeAccelerationPeaksOfRecords
+{
+    
+    lowPeaks  = [[NSMutableArray alloc] init];
+    highPeaks = [[NSMutableArray alloc] init];
+    
+    if(analyzedSegment==nil){
+        return;
+    }
+    
+    
+    NSArray * motionRecords = analyzedSegment.motionValues;
+    ICEMotionData *lastAccelerationData=nil;
+    
+    
+    double newDataSize;
+    double lastDataSize ;
+    
+    for(ICEMotionData* newData in motionRecords){
         
         if(lastAccelerationData!=nil){
             
-            lastHigh = [highs lastObject];
-            lastLow  = [lows  lastObject];
-            dataSize = data.vector.size;
+            
+            newDataSize = newData.vector.size;
             lastDataSize = lastAccelerationData.vector.size;
             
             // consider lastAccelerationData as a valid "low" peak (minima)
-            if( dataSize < lastDataSize && accelerating && [validator isValidAccelerationOfStep:lastAccelerationData lastValid:lastHigh]){
+            if( newDataSize < lastDataSize && accelerating ){
                 
-                [lows addObject:lastAccelerationData];
-                
-                //[ICELogger verbose: TAG line:[NSString stringWithFormat:@"Adding LOW:\t(t)%f\t(n)%f\t(freq)%f\t(th)%f", lastAccelerationData.timeStamp,lastAccelerationData.vector.size, validator.stepFrequency, validator.stepDiffThreshold]];
+                [highPeaks addObject:lastAccelerationData];
                 
                 accelerating=NO;
             }
             // else consider lastAccelerationData as a valid "high" peak (maxima)
-            else if(dataSize > lastDataSize && !accelerating && [validator isValidAccelerationOfStep:lastAccelerationData lastValid:lastLow]){
+            else if(newDataSize > lastDataSize && !accelerating){
                 
-                [highs addObject:lastAccelerationData ];
-                
-                
-                 //[ICELogger verbose:TAG line:[NSString stringWithFormat:@"Adding HIGH:\t(t)%f\t(n)%f\t(freq)%f\t(th)%f", lastAccelerationData.timeStamp,lastAccelerationData.vector.size, validator.stepFrequency, validator.stepDiffThreshold]];
+                [lowPeaks addObject:lastAccelerationData ];
                 
                 accelerating=YES;
             }
-//            accelerating = (dataSize>lastDataSize);
+           
         }
-        lastAccelerationData = data;
-        
+        lastAccelerationData = newData;
     }
-    
-    
+    [ICELogger info:analyzerId line:[NSString stringWithFormat:@"computeAccelerationPeaksOfRecords: lows:%lu, highs:%lu", (unsigned long)lowPeaks.count, (unsigned long)highPeaks.count]];
 }
 
--(void) computeAverages
+-(void) computeValidationRanges
 {
-    avgHigh=0.0;
-    avgLow=0.0;
-    avgStepFrequency =0.0;
-    avgStepThreshold=0.0;
+    double min, max;
+    ICEMotionData* data;
     
-    NSArray* sorted = [highs sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    NSArray* sorted = [highPeaks sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         NSComparisonResult result = NSOrderedSame;
         ICEMotionData* item1 = obj1;
         ICEMotionData* item2 = obj2;
@@ -340,14 +391,16 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
         return result;
     }];
     
-    for(int i=1 ; i<(sorted.count-2); i++){
-        ICEMotionData* data = [sorted objectAtIndex:i];
-        avgHigh+=data.vector.size;
+
+    data = [sorted firstObject];
+    min = data.vector.size;
+    data = [sorted lastObject];
+    max = data.vector.size;
         
-    }
-    avgHigh=avgHigh/(sorted.count-2);
+   
+    highPeaksRange=[ICENumericRange rangeFrom:min to:max];
     
-    sorted = [lows sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    sorted = [lowPeaks sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         NSComparisonResult result = NSOrderedSame;
         ICEMotionData* item1 = obj1;
         ICEMotionData* item2 = obj2;
@@ -360,35 +413,50 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
         return result;
     }];
     
-    for(int i=1 ; i<(sorted.count-2); i++){
-        ICEMotionData* data = [sorted objectAtIndex:i];
-        avgLow+=data.vector.size;
-    }
-    avgLow=avgLow/(sorted.count-2);
+    data = [sorted firstObject];
+    min = data.vector.size;
+    data = [sorted lastObject];
+    max = data.vector.size;
     
-    avgStepThreshold = fabsl(avgHigh-avgLow);
+    lowPeaksRange=[ICENumericRange rangeFrom:min to:max];
+    
+    min = highPeaksRange.lowEnd-lowPeaksRange.highEnd;
+    max = highPeaksRange.highEnd-lowPeaksRange.lowEnd;
+    
+    stepThresholdRange = [ICENumericRange rangeFrom:min to:max];
     
     ICEMotionData *item, *jtem;
-    NSArray* currentLows = lows;
-    NSArray* currentHighs = highs;
+    double start, end;
     
-    item = [currentLows firstObject];
-    jtem = [currentHighs firstObject];
-    double start = MIN(item.timeStamp,jtem.timeStamp);
-    item = [currentLows lastObject];
-    jtem = [currentHighs lastObject];
-    double end = MAX(item.timeStamp, jtem.timeStamp);
+    item = [lowPeaks firstObject];
+    jtem = [highPeaks firstObject];
+    start = MIN(item.timeStamp,jtem.timeStamp);
+    item = [lowPeaks lastObject];
+    jtem = [highPeaks lastObject];
+    end = MAX(item.timeStamp, jtem.timeStamp);
     
-    avgStepFrequency = (end-start)/(currentHighs.count+currentLows.count-1);
+    max = (end-start)/(lowPeaks.count-1+highPeaks.count-1);
+    
+    item = [lowPeaks firstObject];
+    jtem = [highPeaks firstObject];
+    start = MAX(item.timeStamp,jtem.timeStamp);
+    item = [lowPeaks lastObject];
+    jtem = [highPeaks lastObject];
+    end = MIN(item.timeStamp, jtem.timeStamp);
+    
+    min = (end-start)/(lowPeaks.count+highPeaks.count);
+    
+    stepFrequencyRange = [ICENumericRange rangeFrom:min to:max];
 
 }
 
 
--(void) updateResultsToSegment: (ICEMotionSegmentRecords*) segment
+-(void) updateResultsToSegment
 {
-    if(segment!=nil){
-        segment.highs = [NSArray arrayWithArray:highs];
-        segment.lows =  [NSArray arrayWithArray:lows];
+    if(analyzedSegment!=nil){
+        analyzedSegment.analyzedStepsPeaks = peaksAsStepsSequence;
+        analyzedSegment.highPeaks = highPeaks;
+        analyzedSegment.lowPeaks = lowPeaks;
     }
     
 }
@@ -397,23 +465,21 @@ typedef NS_ENUM(NSInteger, ICEMotionAnalysisCertainty) {ICEMotionAnalysisCertain
 -(ICEStepMotionValidator*) generateImprovedValidator
 {
     
-    if(lows.count<2 || highs.count<2){
+    if(lowPeaks.count<2 || highPeaks.count<2){
         return nil; // i.e. cannot improve self
     }
     
-    [self computeAverages];
+    [self computeValidationRanges];
     
     ICEStepMotionValidator* improved = [[ICEImprovedStepMotionValidator alloc] init];
     
-    improved.stepDiffThreshold = self.performanceRate==0.0 ? avgStepThreshold : (validator.stepDiffThreshold*3+avgStepThreshold*7)/10.0;
-    improved.stepMinThreshold = (improved.stepMinThreshold+MIN(avgLow,avgHigh))/2.0;
-    improved.stepMaxThreshold = (improved.stepMaxThreshold+MAX(avgLow,avgHigh))/2.0;
+    improved.stepDiffThresholdRange = stepThresholdRange;
+    improved.stepLowThresholdRange = lowPeaksRange;
+    improved.stepHighThresholdRange = highPeaksRange;
     
-    improved.stepFrequency = self.performanceRate==0.0 ? avgStepFrequency : (validator.stepFrequency*3+avgStepFrequency*7)/10.0;
-    improved.stepMinFrequency = (improved.stepFrequency*0.5);
-    improved.stepMaxFrequency = (improved.stepFrequency*2.0);
+    improved.stepFrequencyRange = stepFrequencyRange;
     
-    [ICELogger debug:TAG line:[NSString stringWithFormat:@"\nImproved step frequency: %f (%f,%f), threshold: %f (%f,%f)", improved.stepFrequency, improved.stepMinFrequency, improved.stepMaxFrequency, improved.stepDiffThreshold, improved.stepMinThreshold, improved.stepMaxThreshold]];
+    [ICELogger debug:TAG line:[NSString stringWithFormat:@"Improved step frequency: %@, threshold: low %@ high %@ diff %@", improved.stepFrequencyRange, improved.stepLowThresholdRange, improved.stepHighThresholdRange, improved.stepDiffThresholdRange]];
     
     return improved;
 }
@@ -487,7 +553,7 @@ static ICEMotionMonitor* instance;
     
     CMMotionManager *motionManager;
     CMDeviceMotion * deviceMotion;
-    CMStepCounter *stepsCounter;
+    /*CMStepCounter *stepsCounter;*/
     NSTimeInterval updateEveryXSec;
     
     // data (curve) smoothing filters
@@ -537,24 +603,28 @@ static ICEMotionMonitor* instance;
     
     motionManager = [[CMMotionManager alloc] init];
     deviceMotion = [[CMDeviceMotion alloc] init];
-    stepsCounter = [[CMStepCounter alloc] init];
+    /*stepsCounter = [[CMStepCounter alloc] init];*/
     
     segmentAnalyzers = [[NSMutableArray alloc] init];
-    [segmentAnalyzers addObject:[[ICEMotionSegmentAnalyzer alloc] init]];
+    [segmentAnalyzers addObject:[ICEMotionSegmentAnalyzer analyzerWithId:@"DEFAULT" validator:nil]];
     
     return self;
 }
 
 -(void) startStepsCounting
 {
-    [ICELogger debug:TAG line:[NSString stringWithFormat:(@"starting step-counting at %f interval"), updateEveryXSec]];
+    [ICELogger verbose:TAG line:[NSString stringWithFormat:(@"starting step-counting at %f interval"), updateEveryXSec]];
     countedSteps=0;
-    if(CMStepCounter.isStepCountingAvailable){
+    /*if(CMStepCounter.isStepCountingAvailable){
+        [ICELogger info:TAG line:@"counting using M7 chip"];
+        
         [self countStepsUsingStepCounter];
     }
-    else{
+    else{*/
+        [ICELogger info:TAG line:@"counting uisng acceloeromter"];
+        
         [self countStepsUsingAccelerometer];
-    }
+    /*}*/
     
 }
 
@@ -566,7 +636,7 @@ static ICEMotionMonitor* instance;
         [countedStepsHandlerTimer invalidate];
         countedStepsHandlerTimer=nil;
     }
-    countedStepsHandlerTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reportCurrentCountToHandler) userInfo:nil repeats:YES];
+   // countedStepsHandlerTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reportCurrentCountToHandler) userInfo:nil repeats:YES];
     
     [self startStepsCounting];
     
@@ -577,30 +647,30 @@ static ICEMotionMonitor* instance;
     if(countedStepsHandler==nil){
         return;
     }
-    if(!CMStepCounter.isStepCountingAvailable){
-    
+    /*if(!CMStepCounter.isStepCountingAvailable){
+    */
         BOOL isAccelerating = accelerating;
-        ICEMotionSegmentAnalyzer* analyzer = [ICEMotionSegmentAnalyzer analizerWithValidator:[self bestAnalyzer].stepValidator];
+    ICEMotionSegmentAnalyzer* analyzer = [ICEMotionSegmentAnalyzer analyzerWithId:@"TEMP" validator:[self bestAnalyzer].stepValidator];
         
         ICEMotionSegmentAnalysisResult *result = [analyzer analyzeSegment:[self.accelerationRecords.motionSegments lastObject] currentlyAccelerating:isAccelerating expectedStepsMin:3 expectedMax:20];
         countedSteps = self.stepsCountAccelerometer+result.countedSteps;
         
-    }
-    [ICELogger debug:TAG line:[NSString stringWithFormat:@"reportCurrentCountToHandler - reporting %ld steps.", (long)countedSteps]];
+    /*}*/
+    [ICELogger debug:TAG line:[NSString stringWithFormat:@"reportCurrentCountToHandler - %ld steps.", (long)countedSteps]];
     countedStepsHandler.handler(countedSteps);
     
     
 }
                         
-
+/*
 -(void)countStepsUsingStepCounter
 {
     [stepsCounter startStepCountingUpdatesToQueue:[NSOperationQueue mainQueue] updateOn:1 withHandler:^(NSInteger numberOfSteps, NSDate *timestamp, NSError *error) {
         countedSteps=numberOfSteps;
-        [ICELogger debug:TAG line:[NSString stringWithFormat:@"countStepsUsingStepCounter - reporting %ld steps.", (long)countedSteps]];
+        [ICELogger info:TAG line:[NSString stringWithFormat:@"countStepsUsingStepCounter - %ld steps.", (long)countedSteps]];
     } ];
 }
-
+*/
 
 -(void)countStepsUsingAccelerometer
 {
@@ -656,19 +726,20 @@ static ICEMotionMonitor* instance;
 
 -(void) stopStepsCounting
 {
+    [ICELogger warning:TAG line:@"stopping...."];
     if(countedStepsHandlerTimer!=nil){
         [countedStepsHandlerTimer invalidate];
         countedStepsHandlerTimer=nil;
     }
-    if(CMStepCounter.isStepCountingAvailable){
+    /*if(CMStepCounter.isStepCountingAvailable){
         [stepsCounter stopStepCountingUpdates];
     }
-    else{
+    else{*/
         [motionManager stopGyroUpdates];
         [motionManager stopDeviceMotionUpdates];
         [self analyzeAccelerationDataWithSegment:[self.accelerationRecords.motionSegments lastObject]];
     
-    }
+    /*}*/
 }
 
 
@@ -680,8 +751,15 @@ static ICEMotionMonitor* instance;
     return analyzer;
 }
 
+
+static int analyzerIds=0;
+
 -(void) analyzeAccelerationDataWithSegment: (ICEMotionSegmentRecords*) segment
 {
+    if(segment==nil){
+        return;
+    }
+        
     BOOL isAccelerating = accelerating;
     ICEMotionSegmentAnalyzer* analyzer = [self bestAnalyzer];
     
@@ -694,24 +772,10 @@ static ICEMotionMonitor* instance;
         
         // update the analysis results to the segment and update the "accelerating" value according to the analysis result.
         
-        [analyzer updateResultsToSegment: segment];
+        [analyzer updateResultsToSegment];
         accelerating = result.endingAcceleration; // i.e. the analysis ended with this "accelerating" value;
         
         countedSteps = self.stepsCountAccelerometer+result.countedSteps;
-        
-        // try to improve - create a tigther analyzer for next segment
-        
-        analyzer = [ICEMotionSegmentAnalyzer analizerWithValidator:[analyzer generateImprovedValidator]];
-        
-        // test it on the current segment:
-        result = [analyzer analyzeSegment:segment currentlyAccelerating:isAccelerating expectedStepsMin:result.countedSteps-1 expectedMax:result.countedSteps+1];
-        if(result.resultCertainty>=ICEMotionAnalysisCertaintyMid){
-            // i.e. - is is at least as good as the one it was generated from - add it to the end of the list
-            [ICELogger info:TAG line:@"Adding an improved analyzer" ];
-            [segmentAnalyzers addObject:analyzer];
-            [analyzer  addResultCertaintyToPerformanceRate:result.resultCertainty];
-        }
-        
         
     }
     else if(result.resultCertainty<=ICEMotionAnalysisCertaintyLow && segmentAnalyzers.count>=2){
@@ -719,11 +783,11 @@ static ICEMotionMonitor* instance;
         ICEMotionSegmentAnalyzer *previous;
         for(unsigned long i=segmentAnalyzers.count-1 ;i>0;i--){
             previous = segmentAnalyzers[i-1];
-            ICEMotionSegmentAnalysisResult *prevResult = [previous analyzeSegment:segment currentlyAccelerating:isAccelerating expectedStepsMin:3 expectedMax:30];
+            ICEMotionSegmentAnalysisResult *prevResult = [previous analyzeSegment:segment currentlyAccelerating:isAccelerating expectedStepsMin:2 expectedMax:30];
             if(prevResult.resultCertainty>result.resultCertainty){
-                [ICELogger info:TAG line:(@"A previous analyzer did better in analyzing")];
+                [ICELogger info:TAG line:@"A previous analyzer performed better"];
                 
-                [previous updateResultsToSegment: segment];
+                [previous updateResultsToSegment];
                 [previous  addResultCertaintyToPerformanceRate:result.resultCertainty];
                 countedSteps = self.stepsCountAccelerometer+result.countedSteps;
             }
@@ -733,28 +797,48 @@ static ICEMotionMonitor* instance;
             }
         }
         
-        // re-sort the collection of analyzers
-        [segmentAnalyzers sortUsingComparator:^NSComparisonResult(ICEMotionSegmentAnalyzer * a1, ICEMotionSegmentAnalyzer * a2) {
-            
-            NSComparisonResult res = NSOrderedSame;
-            if(a1.performanceRate>a2.performanceRate){
-                res = NSOrderedDescending;
-            }
-            else if(a1.performanceRate<a2.performanceRate){
-                res = NSOrderedAscending;
-            }
-            return res;
-        }];
-        
-        // just for debug:
-        ICEMotionSegmentAnalyzer* a ;
-        
-        for(int i=0; i<segmentAnalyzers.count; i++){
-            a=segmentAnalyzers[i];
-            [ICELogger debug:TAG line:[NSString stringWithFormat:@"analyzer %d performance rate: %f",i, a.performanceRate]];
-            i++;
-        }
     }
+    // try to improve - create a tigther analyzer for next segment
+    BOOL previousWasImprovement = [analyzer isKindOfClass: [ICEImprovedStepMotionValidator class]];
+    
+    analyzer = [ICEMotionSegmentAnalyzer analyzerWithId: [NSString stringWithFormat:@"A%d",analyzerIds++]validator:[analyzer generateImprovedValidator]];
+    
+    // test it on the current segment:
+    if(previousWasImprovement){
+        result = [analyzer analyzeSegment:segment currentlyAccelerating:isAccelerating expectedStepsMin:result.countedSteps-1 expectedMax:result.countedSteps+1];
+    }
+    else{
+        result = [analyzer analyzeSegment:segment currentlyAccelerating:isAccelerating expectedStepsMin:2 expectedMax:30];
+    }
+    
+    
+    if(result.resultCertainty>=ICEMotionAnalysisCertaintyMid){
+        // i.e. - is is at least as good as the one it was generated from - add it to the end of the list
+        [ICELogger info:TAG line:@"Adding an improved analyzer" ];
+        [segmentAnalyzers addObject:analyzer];
+        [analyzer  addResultCertaintyToPerformanceRate:result.resultCertainty];
+    }
+    // re-sort the collection of analyzers
+    [segmentAnalyzers sortUsingComparator:^NSComparisonResult(ICEMotionSegmentAnalyzer * a1, ICEMotionSegmentAnalyzer * a2) {
+        
+        NSComparisonResult res = NSOrderedSame;
+        if(a1.performanceRate>a2.performanceRate){
+            res = NSOrderedDescending;
+        }
+        else if(a1.performanceRate<a2.performanceRate){
+            res = NSOrderedAscending;
+        }
+        return res;
+    }];
+    
+    // just for debug:
+    ICEMotionSegmentAnalyzer* a ;
+    
+    for(int i=0; i<segmentAnalyzers.count; i++){
+        a=segmentAnalyzers[i];
+        [ICELogger debug:TAG line:[NSString stringWithFormat:@"analyzer %d %@ perf rate: %f",i, a.analyzerId, a.performanceRate]];
+    }
+
     
 }
 
@@ -764,7 +848,7 @@ static ICEMotionMonitor* instance;
 {
     unsigned long count=0;
     for (ICEMotionSegmentRecords* segment in self.accelerationRecords.motionSegments) {
-        count+=segment.highs.count;
+        count+=segment.analyzedStepsPeaks.count;
     }
     return count;
 }
@@ -772,7 +856,7 @@ static ICEMotionMonitor* instance;
 {
     unsigned long count=0;
     for (ICEMotionSegmentRecords* segment in self.accelerationRecords.motionSegments) {
-        count+=segment.lows.count;
+        count+=segment.analyzedStepsPeaks.count;
     }
     return count;
 }
